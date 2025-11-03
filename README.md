@@ -2,6 +2,17 @@
 
 ![Banner do Projeto](https://cdn.discordapp.com/attachments/600448560944775201/1406769869260591205/banner.png?ex=68a3ac09&is=68a25a89&hm=e2218f20a155020fa6c0de48a0910ab684e2f408217e1bb4f17eaccf0119da07&)
 
+> 📚 **Projeto desenvolvido para a disciplina Projeto Integrador 2 do CEUB, orientado pela professora Kadidja**
+
+## 🔗 Branches do Projeto
+
+| Branch | Descrição | Link |
+|--------|-----------|------|
+| main | Versão principal e estável do projeto | [https://github.com/1harz/CoisasDeGaragem](https://github.com/1harz/CoisasDeGaragem) |
+| docs | Documentação do projeto | [https://github.com/1harz/CoisasDeGaragem/tree/docs](https://github.com/1harz/CoisasDeGaragem/tree/docs) |
+| prototipo-fullstack | Protótipo completo com frontend e backend | [https://github.com/1harz/CoisasDeGaragem/tree/prototipo-fullstack](https://github.com/1harz/CoisasDeGaragem/tree/prototipo-fullstack) |
+| prototipos-frontend | Protótipos da interface frontend | [https://github.com/1harz/CoisasDeGaragem/tree/prototipos-frontend](https://github.com/1harz/CoisasDeGaragem/tree/prototipos-frontend) |
+
 ## ✅ Visão Geral
 
 O **Coisas de Garagem** é uma plataforma web inovadora que transforma garage sales tradicionais em experiências digitais modernas. Conectando vendedores e compradores através de um sistema que oferece uma maneira prática, segura e eficiente de gerenciar vendas de itens usados.
@@ -80,11 +91,11 @@ Testado e compatível com:
 
 ---
 
-**Equipe responsável pelo desenvolvimento:**  
+## 👥 Equipe de Desenvolvimento
 
-| Nome         | Função                     |  
-|--------------|----------------------------|  
-| Raul Falluh     | Frontend Developer            |  
-| Rodrigo Lemos     | Backend Developer         |  
-| Rodrigo Castro    | DataBase Developer                |  
-| Rafael Irvine    | Backend Developer & Documentador             |  
+| Nome | GitHub | Função |
+|------|--------|--------|
+| Raul Falluh | [1harz](https://github.com/1harz) | Frontend Developer |
+| Rodrigo Lemos | [RodrigoHLemos](https://github.com/RodrigoHLemos) | Backend Developer |
+| Rodrigo Castro | [rodrigocsc5](https://github.com/rodrigocsc5) | DataBase Developer |
+| Rafael Irvine | [Rafael-irvine](https://github.com/Rafael-irvine) | Backend Developer & Documentador |
