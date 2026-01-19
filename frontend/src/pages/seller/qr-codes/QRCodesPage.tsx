@@ -3,6 +3,8 @@ import { QRCodeDisplay } from '@/components/seller/QRCodeDisplay';
 import { Button } from '@/components/common/Button';
 import { useProducts } from '@/hooks/useProducts';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBox } from '@fortawesome/free-solid-svg-icons';
 
 export default function QRCodesPage() {
   const { products } = useProducts();
@@ -31,19 +33,7 @@ export default function QRCodesPage() {
         {/* Products with QR Codes */}
         {products.length === 0 ? (
           <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M20 7l-8-4-8H5.4M15 13l3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5 2.5M13 13l3.5 2.5"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faBox} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Nenhum QR Code gerado
             </h3>

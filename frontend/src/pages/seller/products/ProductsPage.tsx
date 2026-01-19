@@ -12,6 +12,8 @@ import { api } from '@/services/api';
 import { useProductsStore } from '@/store/productsStore';
 import { useState, useEffect } from 'react';
 import type { Product, CreateProductRequest, UpdateProductRequest } from '@/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faBox, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProductsPage() {
   const { products, fetchProducts } = useProducts();
@@ -30,7 +32,7 @@ export default function ProductsPage() {
   const pageSize = 9;
 
   // Filter products based on search term
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = (products || []).filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.category?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -242,9 +244,7 @@ export default function ProductsPage() {
               ]}
             />
             <Button variant="primary" onClick={handleCreate}>
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m0 0l6-6m6 6l6 6M16 4v16m0 0l-6-6m6 6" />
-              </svg>
+              <FontAwesomeIcon icon={faPlus} className="w-5 h-5 mr-2" />
               Novo Produto
             </Button>
           </div>
@@ -279,19 +279,7 @@ export default function ProductsPage() {
         {/* Empty State */}
         {filteredProducts.length === 0 && products.length > 0 && (
           <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faBox} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Nenhum produto encontrado
             </h3>
@@ -304,19 +292,7 @@ export default function ProductsPage() {
         {/* Empty State - No Products */}
         {products.length === 0 && (
           <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M20 7l-8-4-8H5.4M15 13l3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faBoxOpen} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Nenhum produto cadastrado
             </h3>

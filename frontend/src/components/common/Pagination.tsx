@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button } from './Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface PaginationProps {
   currentPage: number;
@@ -67,14 +69,7 @@ export function Pagination({
           disabled={currentPage === 1}
           className="px-3 py-2"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faChevronLeft} className="w-5 h-5" />
         </Button>
 
         {/* Page Numbers */}
@@ -101,14 +96,7 @@ export function Pagination({
           disabled={currentPage === totalPages}
           className="px-3 py-2"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faChevronRight} className="w-5 h-5" />
         </Button>
       </div>
     </div>

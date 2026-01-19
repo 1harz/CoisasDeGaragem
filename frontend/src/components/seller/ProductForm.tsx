@@ -13,11 +13,11 @@ interface ProductFormProps {
 }
 
 const conditionOptions = [
-  { value: 'new', label: 'Novo' },
-  { value: 'like-new', label: 'Como Novo' },
-  { value: 'good', label: 'Bom' },
-  { value: 'fair', label: 'Razoável' },
-  { value: 'poor', label: 'Ruim' },
+  { value: 'NEW', label: 'Novo' },
+  { value: 'LIKE_NEW', label: 'Como Novo' },
+  { value: 'GOOD', label: 'Bom' },
+  { value: 'FAIR', label: 'Razoável' },
+  { value: 'POOR', label: 'Ruim' },
 ];
 
 const categoryOptions = [
@@ -36,7 +36,7 @@ export function ProductForm({ product, onSubmit, onCancel, isLoading }: ProductF
   const [description, setDescription] = useState(product?.description || '');
   const [price, setPrice] = useState(product?.price?.toString() || '');
   const [category, setCategory] = useState(product?.category || '');
-  const [condition, setCondition] = useState<ProductCondition>(product?.condition || 'good');
+  const [condition, setCondition] = useState<ProductCondition>(product?.condition || 'GOOD');
   const [imageUrl, setImageUrl] = useState(product?.imageUrl || '');
   const [error, setError] = useState('');
 

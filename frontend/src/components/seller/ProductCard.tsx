@@ -20,14 +20,14 @@ export function ProductCard({
 }: ProductCardProps) {
   const getConditionBadge = (condition?: string) => {
     const conditionMap: Record<string, { label: string; variant: 'success' | 'warning' | 'error' }> = {
-      'new': { label: 'Novo', variant: 'success' },
-      'like-new': { label: 'Como Novo', variant: 'success' },
-      'good': { label: 'Bom', variant: 'success' },
-      'fair': { label: 'Razoável', variant: 'warning' },
-      'poor': { label: 'Ruim', variant: 'error' },
+      'NEW': { label: 'Novo', variant: 'success' },
+      'LIKE_NEW': { label: 'Como Novo', variant: 'success' },
+      'GOOD': { label: 'Bom', variant: 'success' },
+      'FAIR': { label: 'Razoável', variant: 'warning' },
+      'POOR': { label: 'Ruim', variant: 'error' },
     };
 
-    return conditionMap[condition || 'good'] || { label: 'Bom', variant: 'success' };
+    return conditionMap[condition || 'GOOD'] || { label: 'Bom', variant: 'success' };
   };
 
   const conditionBadge = getConditionBadge(product.condition);
@@ -59,7 +59,7 @@ export function ProductCard({
             </svg>
           </div>
         )}
-        
+
         {/* Availability Badge */}
         <div className="absolute top-2 right-2">
           {product.isSold ? (

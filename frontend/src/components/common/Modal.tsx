@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface ModalProps {
   isOpen: boolean;
@@ -61,19 +63,7 @@ export function Modal({
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none"
           aria-label="Close modal"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faTimes} className="w-6 h-6" />
         </button>
 
         {/* Header */}

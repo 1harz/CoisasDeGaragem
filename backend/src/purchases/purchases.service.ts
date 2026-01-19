@@ -50,20 +50,62 @@ export class PurchasesService {
         });
     }
 
-    async findAllByBuyer(buyerId: string) {
-        return this.prisma.purchase.findMany({
-            where: { buyerId },
-            include: { product: true, seller: { select: { name: true, email: true } } },
-            orderBy: { createdAt: 'desc' },
-        });
+    async findAllByBuyer(buyerId: string, page: number = 1, limit: number = 20, status?: string) {
+        const skip = (page - 1) * limit;
+        const where: any = { buyerId };
+        if (status) {
+            where.status = status;
+        }
+
+        const [purchases, total] = await Promise.all([
+            this.prisma.purchase.findMany({
+                where,
+                include: { product: true, seller: { select: { name: true, email: true } } },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            this.prisma.purchase.count({ where }),
+        ]);
+
+        return {
+            purchases,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
     }
 
-    async findAllBySeller(sellerId: string) {
-        return this.prisma.purchase.findMany({
-            where: { sellerId },
-            include: { product: true, buyer: { select: { name: true, email: true } } },
-            orderBy: { createdAt: 'desc' },
-        });
+    async findAllBySeller(sellerId: string, page: number = 1, limit: number = 20, status?: string) {
+        const skip = (page - 1) * limit;
+        const where: any = { sellerId };
+        if (status) {
+            where.status = status;
+        }
+
+        const [purchases, total] = await Promise.all([
+            this.prisma.purchase.findMany({
+                where,
+                include: { product: true, buyer: { select: { name: true, email: true } } },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            this.prisma.purchase.count({ where }),
+        ]);
+
+        return {
+            purchases,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
     }
 
     async findOne(id: string, userId: string) {

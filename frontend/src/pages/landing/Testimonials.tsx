@@ -5,6 +5,8 @@ import type { Testimonial } from '@/types';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -84,13 +86,11 @@ export function Testimonials() {
               <Card className="p-8 h-full bg-white border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 rounded-2xl flex flex-col">
                 <div className="flex items-center gap-1 mb-6 text-yellow-400">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
+                    <FontAwesomeIcon
                       key={star}
-                      className={`w-5 h-5 ${star <= testimonial.rating ? 'fill-current' : 'text-gray-200'}`}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
+                      icon={faStar}
+                      className={`w-5 h-5 ${star <= testimonial.rating ? 'text-yellow-400' : 'text-gray-200'}`}
+                    />
                   ))}
                 </div>
 

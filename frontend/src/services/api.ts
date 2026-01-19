@@ -4,6 +4,7 @@ import type {
   LoginResponse,
   RegisterRequest,
   User,
+  UserRole,
   Product,
   ProductFilters,
   CreateProductRequest,
@@ -18,12 +19,11 @@ import type {
   TestimonialFilters,
   Notification,
   NotificationFilters,
-  ApiResponse,
-  ApiError,
+
   ApiResult,
 } from '@/types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 const ENABLE_MOCK_DATA = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true';
 
 // Helper function to build query string
@@ -49,23 +49,33 @@ async function fetchApi<T>(
 ): Promise<ApiResult<T>> {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
       headers: {
         'Content-Type': 'application/json',
         ...options?.headers,
       },
-      ...options,
     });
 
     if (!response.ok) {
-      const error: ApiError = await response.json();
-      return { success: false, error };
+      const errorData = await response.json();
+      return {
+        success: false,
+        error: {
+          code: errorData.error || response.status.toString(),
+          message: Array.isArray(errorData.message) ? errorData.message.join(', ') : (errorData.message || response.statusText),
+          details: errorData,
+        }
+      };
     }
 
-    return response.json();
+    const data = await response.json();
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
     return {
-      success: false, // Type 'false' is not assignable to type 'true'. - this error suggests ApiResponse success might be typed as true for data case? No, usually generic. 
-      // Wait, if ApiResponse is defined as `Success<T> | Failure`, and Failure has success: false.
+      success: false,
       error: {
         code: 'NETWORK_ERROR',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -78,53 +88,21 @@ async function fetchApi<T>(
 export const api = {
   // Authentication
   login: async (credentials: LoginRequest): Promise<ApiResult<LoginResponse>> => {
-    // Hardcoded credentials access
-    if (credentials.email === 'rauldev@vendas.com' && credentials.password === 'Braslog!23') {
-      return {
-        success: true,
-        data: {
-          user: {
-            id: 'seller-123',
-            name: 'Raul Vendedor',
-            email: 'rauldev@vendas.com',
-            role: 'seller',
-            isActive: true,
-            password: '', // Mock password
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          token: 'mock-seller-token-abc-123',
-          expiresIn: 86400,
-        }
-      };
-    }
-    if (credentials.email === 'rauldev@compras.com' && credentials.password === 'Braslog!23') {
-      return {
-        success: true,
-        data: {
-          user: {
-            id: 'buyer-123',
-            name: 'Raul Comprador',
-            email: 'rauldev@compras.com',
-            role: 'buyer',
-            isActive: true, // Added
-            password: '',   // Added
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          token: 'mock-buyer-token-xyz-789',
-          expiresIn: 86400,
-        }
-      };
-    }
+    // Hardcoded credentials have been removed for security reasons.
+    // See DELETED_LOGINS.md for details on what was removed.
 
     if (ENABLE_MOCK_DATA) {
       return mockApi.login(credentials);
     }
-    return fetchApi<LoginResponse>('/auth/login', {
+    const response = await fetchApi<LoginResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
+
+    if (response.success && response.data.user) {
+      response.data.user.role = response.data.user.role.toLowerCase() as UserRole;
+    }
+    return response;
   },
 
   logout: async (): Promise<ApiResult<{ message: string }>> => {
@@ -140,10 +118,18 @@ export const api = {
     if (ENABLE_MOCK_DATA) {
       return mockApi.register(data);
     }
-    return fetchApi<LoginResponse>('/auth/register', {
+    const response = await fetchApi<LoginResponse>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        role: data.role.toUpperCase(), // Map 'buyer'/'seller' to 'BUYER'/'SELLER'
+      }),
     });
+
+    if (response.success && response.data.user) {
+      response.data.user.role = response.data.user.role.toLowerCase() as UserRole;
+    }
+    return response;
   },
 
   getMe: async (): Promise<ApiResult<User>> => {
@@ -311,50 +297,23 @@ export const api = {
   getTestimonials: async (
     filters?: TestimonialFilters,
   ): Promise<ApiResult<Testimonial[]>> => {
-    if (ENABLE_MOCK_DATA) {
-      return mockApi.getTestimonials(filters);
-    }
-    return fetchApi<Testimonial[]>(`/testimonials${buildQueryString(filters)}`, {
-      method: 'GET',
-    });
+    // Always use mock for testimonials
+    return mockApi.getTestimonials(filters);
   },
 
   // Notifications
   getNotifications: async (
     filters?: NotificationFilters,
   ): Promise<ApiResult<Notification[]>> => {
-    if (ENABLE_MOCK_DATA) {
-      return mockApi.getNotifications(filters);
-    }
-    return fetchApi<Notification[]>(`/notifications${buildQueryString(filters)}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    // Always use mock for notifications
+    return mockApi.getNotifications(filters);
   },
 
   markNotificationAsRead: async (id: string): Promise<ApiResult<Notification>> => {
-    if (ENABLE_MOCK_DATA) {
-      return mockApi.markNotificationAsRead(id);
-    }
-    return fetchApi<Notification>(`/notifications/${id}/read`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    return mockApi.markNotificationAsRead(id);
   },
 
   markAllNotificationsAsRead: async (): Promise<ApiResult<{ message: string }>> => {
-    if (ENABLE_MOCK_DATA) {
-      return mockApi.markAllNotificationsAsRead();
-    }
-    return fetchApi<{ message: string }>('/notifications/read-all', {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+    return mockApi.markAllNotificationsAsRead();
   },
 };

@@ -1,6 +1,8 @@
 import { SellerSidebar } from '@/components/seller/SellerSidebar';
 // import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 interface SellerLayoutProps {
   children: React.ReactNode;
@@ -28,9 +30,7 @@ export function SellerLayout({ children }: SellerLayoutProps) {
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Abrir menu"
           >
-            <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <FontAwesomeIcon icon={faBars} className="w-6 h-6 text-gray-700" />
           </button>
           <h1 className="text-lg font-semibold text-gray-900">
             Painel do Vendedor

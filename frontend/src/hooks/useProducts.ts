@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useProductsStore } from '@/store/productsStore';
 import { api } from '@/services/api';
+import type { CreateProductRequest } from '@/types';
 
 export function useProducts() {
   const {
@@ -20,7 +21,11 @@ export function useProducts() {
       const result = await api.getProducts(newFilters || filters);
 
       if (result.success) {
-        setProducts(result.data.products);
+        // Handle both array response (current backend) and object response (paginated)
+        const productsData = Array.isArray(result.data)
+          ? result.data
+          : (result.data?.products || []);
+        setProducts(productsData);
       } else {
         throw new Error(result.error.message);
       }
@@ -42,15 +47,7 @@ export function useProducts() {
   );
 
   const createProduct = useCallback(
-    async (data: {
-      name: string;
-      description: string;
-      price: number;
-      currency: string;
-      imageUrl?: string;
-      category?: string;
-      condition?: 'new' | 'like-new' | 'good' | 'fair' | 'poor';
-    }) => {
+    async (data: CreateProductRequest) => {
       const result = await api.createProduct(data);
 
       if (result.success) {

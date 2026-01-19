@@ -3,6 +3,8 @@ import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -46,9 +48,7 @@ export default function SettingsPage() {
         {success && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
             <div className="flex items-center gap-3">
-              <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2m-6 0l4 4m0 6 4l6 6M5 13l2 2-2 2-5.5M13 13l5 2.5M13 13v-7.5l-3.5 2.5M13 13l3.5 2.5" />
-              </svg>
+              <FontAwesomeIcon icon={faCheck} className="w-6 h-6 text-green-600" />
               <div>
                 <p className="font-medium text-green-900">Configurações salvas com sucesso!</p>
                 <p className="text-sm text-green-700">Suas alterações foram aplicadas.</p>

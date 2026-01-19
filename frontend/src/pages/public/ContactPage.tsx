@@ -2,6 +2,8 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,9 +36,7 @@ export default function ContactPage() {
                         {isSuccess ? (
                             <div className="p-8 text-center">
                                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
+                                    <FontAwesomeIcon icon={faCheck} className="h-6 w-6 text-green-600" />
                                 </div>
                                 <h3 className="text-lg leading-6 font-medium text-gray-900">Mensagem enviada!</h3>
                                 <p className="mt-2 text-sm text-gray-500">

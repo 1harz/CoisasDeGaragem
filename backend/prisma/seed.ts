@@ -4,43 +4,9 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-    const password = await bcrypt.hash('password123', 10);
-
-    const seller = await prisma.user.upsert({
-        where: { email: 'seller@example.com' },
-        update: {},
-        create: {
-            email: 'seller@example.com',
-            name: 'John Seller',
-            password,
-            role: UserRole.SELLER,
-        },
-    });
-
-    const buyer = await prisma.user.upsert({
-        where: { email: 'buyer@example.com' },
-        update: {},
-        create: {
-            email: 'buyer@example.com',
-            name: 'Jane Buyer',
-            password,
-            role: UserRole.BUYER,
-        },
-    });
-
-    const product = await prisma.product.create({
-        data: {
-            name: 'Vintage Lamp',
-            description: 'A beautiful vintage lamp.',
-            price: 50.0,
-            sellerId: seller.id,
-            condition: ProductCondition.GOOD,
-            category: 'Home',
-            qrCode: 'unique-qr-code-123',
-        },
-    });
-
-    console.log({ seller, buyer, product });
+    // Mock users and products have been removed for security reasons.
+    // See DELETED_LOGINS.md for details on what was removed.
+    console.log('Seed data has been removed. No mock users or products will be created.');
 }
 
 main()

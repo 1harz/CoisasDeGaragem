@@ -7,33 +7,10 @@ import type {
   Notification,
 } from '@/types';
 
-// Mock Users
-export const mockUsers: User[] = [
-  {
-    id: 'user-1',
-    email: 'seller@example.com',
-    password: 'hashed_password',
-    name: 'João Silva',
-    role: 'seller',
-    avatarUrl: '/avatars/seller-1.jpg',
-    phone: '+55 11 98765-4321',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-15T00:00:00Z',
-    isActive: true,
-  },
-  {
-    id: 'user-2',
-    email: 'buyer@example.com',
-    password: 'hashed_password',
-    name: 'Maria Santos',
-    role: 'buyer',
-    avatarUrl: '/avatars/buyer-1.jpg',
-    phone: '+55 11 91234-5678',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-15T00:00:00Z',
-    isActive: true,
-  },
-];
+// Mock Users - REMOVED FOR SECURITY REASONS
+// Mock login credentials have been removed to prevent unauthorized access.
+// See DELETED_LOGINS.md for details on what was removed.
+export const mockUsers: User[] = [];
 
 // Mock Products
 export const mockProducts: Product[] = [
@@ -142,9 +119,9 @@ export const mockTestimonials: Testimonial[] = [
   {
     id: 'testimonial-1',
     userId: 'user-2',
-    userName: 'Maria Santos',
-    userAvatarUrl: '/avatars/buyer-1.jpg',
-    content: 'Ótimo sistema! Consegui encontrar produtos incríveis nos garage sales da minha região.',
+    userName: 'Raul Dev',
+    userAvatarUrl: 'https://avatars.githubusercontent.com/u/132016342?v=4',
+    content: 'Ótimo sistema! Utiliza bpas práticas de programação 👍',
     rating: 5,
     isFeatured: true,
     isVisible: true,
@@ -153,8 +130,8 @@ export const mockTestimonials: Testimonial[] = [
   {
     id: 'testimonial-2',
     userId: 'user-1',
-    userName: 'João Silva',
-    userAvatarUrl: '/avatars/seller-1.jpg',
+    userName: 'Rodrigo Lemos',
+    userAvatarUrl: 'https://avatars.githubusercontent.com/u/127106444?v=4',
     content: 'Muito fácil de usar. Consigo gerar QR codes para todos os meus produtos rapidamente.',
     rating: 4,
     isFeatured: true,
@@ -164,24 +141,13 @@ export const mockTestimonials: Testimonial[] = [
   {
     id: 'testimonial-3',
     userId: 'user-3',
-    userName: 'Ana Costa',
-    userAvatarUrl: '/avatars/buyer-2.jpg',
+    userName: 'Rodrigo Castro',
+    userAvatarUrl: 'https://avatars.githubusercontent.com/u/110540450?v=4',
     content: 'A interface é muito intuitiva e responsiva. Funciona perfeitamente no celular.',
     rating: 5,
     isFeatured: true,
     isVisible: true,
     createdAt: '2026-01-12T00:00:00Z',
-  },
-  {
-    id: 'testimonial-4',
-    userId: 'user-4',
-    userName: 'Carlos Oliveira',
-    userAvatarUrl: '/avatars/seller-2.jpg',
-    content: 'Excelente para organizar minhas vendas e acompanhar o desempenho.',
-    rating: 4,
-    isFeatured: false,
-    isVisible: true,
-    createdAt: '2026-01-13T00:00:00Z',
   },
 ];
 

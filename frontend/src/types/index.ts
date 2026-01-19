@@ -25,7 +25,7 @@ export interface AuthSession {
 }
 
 // Product Types
-export type ProductCondition = 'new' | 'like-new' | 'good' | 'fair' | 'poor';
+export type ProductCondition = 'NEW' | 'LIKE_NEW' | 'GOOD' | 'FAIR' | 'POOR';
 
 export interface Product {
   id: string;

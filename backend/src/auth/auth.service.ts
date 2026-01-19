@@ -28,7 +28,8 @@ export class AuthService {
         }
         const payload = { email: user.email, sub: user.id, role: user.role };
         return {
-            access_token: this.jwtService.sign(payload),
+            token: this.jwtService.sign(payload),
+            expiresIn: 3600, // 1 hour
             user,
         };
     }
@@ -44,6 +45,12 @@ export class AuthService {
             password: hashedPassword,
         });
         const { password, ...result } = user;
-        return result;
+
+        const payload = { email: user.email, sub: user.id, role: user.role };
+        return {
+            token: this.jwtService.sign(payload),
+            expiresIn: 3600,
+            user: result,
+        };
     }
 }

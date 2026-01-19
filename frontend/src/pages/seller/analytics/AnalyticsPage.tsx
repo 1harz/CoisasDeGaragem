@@ -3,6 +3,8 @@ import { SalesChart } from '@/components/seller/SalesChart';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import type { AnalyticsData } from '@/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar } from '@fortawesome/free-solid-svg-icons';
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -49,19 +51,7 @@ export default function AnalyticsPage() {
     return (
       <SellerLayout>
         <div className="text-center py-12">
-          <svg
-            className="w-16 h-16 mx-auto text-gray-400 mb-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002 2v4m-2 2h10a2 2 0 002 2v10m-6 0a2 2 0 002 2m0 0V9a2 2 0 012 2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002 2z"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faChartBar} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
             Carregando dados de analytics...
           </h3>

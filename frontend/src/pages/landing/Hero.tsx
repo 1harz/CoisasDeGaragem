@@ -3,6 +3,8 @@ import { Button } from '@/components/common/Button';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQrcode, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export function Hero() {
   const containerRef = useRef(null);
@@ -84,9 +86,7 @@ export function Hero() {
                 <div className="space-y-4">
                   <div className="h-4 w-1/3 bg-white/20 rounded-full"></div>
                   <div className="h-32 w-full bg-white/10 rounded-xl border border-white/10 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 4v1m6 11h2m-6 0h-2m4 4v12a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5" />
-                    </svg>
+                    <FontAwesomeIcon icon={faQrcode} className="w-16 h-16 text-white/50" />
                   </div>
                   <div className="space-y-2">
                     <div className="h-3 w-3/4 bg-white/20 rounded-full"></div>
@@ -103,9 +103,7 @@ export function Hero() {
               <div className="absolute -right-8 top-20 bg-white rounded-xl p-4 shadow-xl animate-float-slow">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
+                    <FontAwesomeIcon icon={faCheck} className="w-6 h-6" />
                   </div>
                   <div>
                     <div className="text-xs text-gray-500">Status</div>

@@ -8,6 +8,8 @@ import { Select } from '@/components/common/Select';
 import { Pagination } from '@/components/common/Pagination';
 import { useState, useEffect } from 'react';
 import type { Purchase } from '@/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faBox, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 
 export default function PurchasesPage() {
   const { purchases, fetchPurchases } = usePurchases();
@@ -52,7 +54,7 @@ export default function PurchasesPage() {
   }, [searchTerm, sortBy, sortOrder]);
 
   // Load purchases on mount
-  useState(() => {
+  useEffect(() => {
     const loadPurchases = async () => {
       setIsLoading(true);
       setError('');
@@ -65,7 +67,7 @@ export default function PurchasesPage() {
       }
     };
     loadPurchases();
-  });
+  }, [fetchPurchases]);
 
   const handleViewDetails = (purchase: Purchase) => {
     setSelectedPurchase(purchase);
@@ -177,19 +179,7 @@ export default function PurchasesPage() {
         {/* Purchases List */}
         {sortedPurchases.length === 0 && purchases.length > 0 ? (
           <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faSearch} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Nenhuma compra encontrada
             </h3>
@@ -199,19 +189,7 @@ export default function PurchasesPage() {
           </div>
         ) : filteredPurchases.length === 0 ? (
           <div className="text-center py-12">
-            <svg
-              className="w-16 h-16 mx-auto text-gray-400 mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M16 11V7a4 4 0 11-8 0v4m0 0l-8 4m16-4v2m0 0l-8 4m16-4v2m0 0l-8 4m-4 4v16a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faBox} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Nenhuma compra encontrada
             </h3>
@@ -222,7 +200,7 @@ export default function PurchasesPage() {
               onClick={() => window.location.href = '/buyer/qr-scanner'}
               className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
             >
-              Escanear QR Code
+              <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Escanear QR Code
             </button>
           </div>
         ) : (

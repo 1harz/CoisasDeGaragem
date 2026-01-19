@@ -2,6 +2,8 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQrcode, faChartBar, faMobileAlt, faSmile, faClock, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,61 +12,37 @@ export function Features() {
 
   const features = [
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2m4 4v12a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faQrcode} className="w-6 h-6" />,
       title: 'QR Codes Únicos',
       description: 'Cada produto recebe um código exclusivo. Cole, escaneie e venda instantaneamente.',
       color: 'bg-blue-100 text-blue-600'
     },
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002-2h2a2 2 0 002-2z" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faChartBar} className="w-6 h-6" />,
       title: 'Analytics em Tempo Real',
       description: 'Acompanhe suas vendas, receita e itens mais populares enquanto acontecem.',
       color: 'bg-indigo-100 text-indigo-600'
     },
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faMobileAlt} className="w-6 h-6" />,
       title: '100% Mobile First',
       description: 'Interface otimizada para qualquer dispositivo. Gerencie tudo do seu celular.',
       color: 'bg-purple-100 text-purple-600'
     },
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faSmile} className="w-6 h-6" />,
       title: 'Simples e Intuitivo',
       description: 'Sem configurações complexas. Cadastre, imprima e comece a vender.',
       color: 'bg-teal-100 text-teal-600'
     },
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faClock} className="w-6 h-6" />,
       title: 'Economize Tempo',
       description: 'Automatize o processo de vendas e evite filas e cálculos manuais.',
       color: 'bg-rose-100 text-rose-600'
     },
     {
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
+      icon: <FontAwesomeIcon icon={faShieldAlt} className="w-6 h-6" />,
       title: 'Segurança Total',
       description: 'Transações seguras e dados protegidos para você e seus clientes.',
       color: 'bg-emerald-100 text-emerald-600'

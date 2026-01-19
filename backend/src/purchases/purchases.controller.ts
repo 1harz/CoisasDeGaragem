@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { PurchasesService } from './purchases.service';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -11,6 +11,18 @@ import { CurrentUser } from '../auth/current-user.decorator';
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class PurchasesController {
     constructor(private readonly purchasesService: PurchasesService) { }
+
+    @Get()
+    findAll(@CurrentUser() user: any, @Query('page') page?: string, @Query('limit') limit?: string, @Query('status') status?: string) {
+        const pageNumber = page ? parseInt(page, 10) : 1;
+        const limitNumber = limit ? parseInt(limit, 10) : 20;
+
+        if (user.role === UserRole.BUYER) {
+            return this.purchasesService.findAllByBuyer(user.userId, pageNumber, limitNumber, status);
+        } else if (user.role === UserRole.SELLER) {
+            return this.purchasesService.findAllBySeller(user.userId, pageNumber, limitNumber, status);
+        }
+    }
 
     @Post()
     @Roles(UserRole.BUYER)
