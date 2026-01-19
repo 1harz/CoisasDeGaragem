@@ -46,7 +46,7 @@ function buildQueryString(params?: Record<string, any>): string {
 async function fetchApi<T>(
   endpoint: string,
   options?: RequestInit,
-): Promise<ApiResponse<T>> {
+): Promise<ApiResult<T>> {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       headers: {
@@ -58,13 +58,14 @@ async function fetchApi<T>(
 
     if (!response.ok) {
       const error: ApiError = await response.json();
-      return error;
+      return { success: false, error };
     }
 
     return response.json();
   } catch (error) {
     return {
-      success: false,
+      success: false, // Type 'false' is not assignable to type 'true'. - this error suggests ApiResponse success might be typed as true for data case? No, usually generic. 
+      // Wait, if ApiResponse is defined as `Success<T> | Failure`, and Failure has success: false.
       error: {
         code: 'NETWORK_ERROR',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -87,10 +88,13 @@ export const api = {
             name: 'Raul Vendedor',
             email: 'rauldev@vendas.com',
             role: 'seller',
+            isActive: true,
+            password: '', // Mock password
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
           token: 'mock-seller-token-abc-123',
+          expiresIn: 86400,
         }
       };
     }
@@ -103,10 +107,13 @@ export const api = {
             name: 'Raul Comprador',
             email: 'rauldev@compras.com',
             role: 'buyer',
+            isActive: true, // Added
+            password: '',   // Added
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
           token: 'mock-buyer-token-xyz-789',
+          expiresIn: 86400,
         }
       };
     }

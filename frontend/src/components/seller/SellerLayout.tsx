@@ -1,5 +1,5 @@
 import { SellerSidebar } from '@/components/seller/SellerSidebar';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+// import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useState } from 'react';
 
 interface SellerLayoutProps {
@@ -7,7 +7,7 @@ interface SellerLayoutProps {
 }
 
 export function SellerLayout({ children }: SellerLayoutProps) {
-  const isMobile = useMediaQuery('(max-width: 1023px)');
+  //   const isMobile = useMediaQuery('(max-width: 1023px)');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {

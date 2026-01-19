@@ -1,5 +1,5 @@
 import { BuyerSidebar } from '@/components/buyer/BuyerSidebar';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+// import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useState } from 'react';
 
 interface BuyerLayoutProps {
@@ -7,7 +7,7 @@ interface BuyerLayoutProps {
 }
 
 export function BuyerLayout({ children }: BuyerLayoutProps) {
-  const isMobile = useMediaQuery('(max-width: 1023px)');
+  //   const isMobile = useMediaQuery('(max-width: 1023px)');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
