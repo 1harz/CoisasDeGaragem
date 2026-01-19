@@ -1,101 +1,73 @@
-# 📦 Coisas de Garagem - Sistema de Gerenciamento de Garage Sales
+# React + TypeScript + Vite
 
-![Banner do Projeto](https://cdn.discordapp.com/attachments/600448560944775201/1406769869260591205/banner.png?ex=68a3ac09&is=68a25a89&hm=e2218f20a155020fa6c0de48a0910ab684e2f408217e1bb4f17eaccf0119da07&)
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-> 📚 **Projeto desenvolvido para a disciplina Projeto Integrador 2 do CEUB, orientado pela professora Kadidja**
+Currently, two official plugins are available:
 
-## 🔗 Branches do Projeto
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-| Branch | Descrição | Link |
-|--------|-----------|------|
-| main | Versão principal e estável do projeto | [https://github.com/1harz/CoisasDeGaragem](https://github.com/1harz/CoisasDeGaragem) |
-| docs | Documentação do projeto | [https://github.com/1harz/CoisasDeGaragem/tree/docs](https://github.com/1harz/CoisasDeGaragem/tree/docs) |
-| prototipo-fullstack | Protótipo completo com frontend e backend | [https://github.com/1harz/CoisasDeGaragem/tree/prototipo-fullstack](https://github.com/1harz/CoisasDeGaragem/tree/prototipo-fullstack) |
-| prototipos-frontend | Protótipos da interface frontend | [https://github.com/1harz/CoisasDeGaragem/tree/prototipos-frontend](https://github.com/1harz/CoisasDeGaragem/tree/prototipos-frontend) |
+## React Compiler
 
-## ✅ Visão Geral
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-O **Coisas de Garagem** é uma plataforma web inovadora que transforma garage sales tradicionais em experiências digitais modernas. Conectando vendedores e compradores através de um sistema que oferece uma maneira prática, segura e eficiente de gerenciar vendas de itens usados.
+## Expanding the ESLint configuration
 
-## 🎟 Funcionalidades Principais
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### 🛍️ Para Vendedores
-- 📝 Cadastro fácil de produtos com fotos e descrições
-- 🖨️ Geração automática de QR Codes para cada item
-- 📊 Dashboard com estatísticas de vendas e receita
-- 📱 Interface otimizada para dispositivos móveis
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-### 🛒 Para Compradores
-- 🔍 Busca de produtos por QR Code ou código manual
-- 📱 Scanner integrado usando a câmera do dispositivo
-- 💳 Processo de compra simplificado e organizado
-- 📦 Histórico de compras com registro adequado
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-## 🚀 Tecnologias Utilizadas
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-### Frontend
-- ![React](https://img.shields.io/badge/-ReactJS-E34F26?logo=react&logoColor=white)
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-### Bibliotecas
-- [QRCode.js](https://davidshimjs.github.io/qrcodejs/) - Geração de QR Codes
-- [jsQR](https://github.com/cozmo/jsQR) - Leitura de QR Codes
-- [Font Awesome](https://fontawesome.com/) - Ícones modernos
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## 🎨 Design e Experiência do Usuário
-
-Nosso sistema foi projetado com foco em:
-- 🖥️ **Responsividade** - Funciona perfeitamente em qualquer dispositivo
-- 🎭 **Animações Suaves** - Efeitos visuais que melhoram a usabilidade
-- 🖱️ **Interatividade** - Elementos que respondem a movimentos do mouse
-- 🏗️ **Arquitetura Modular** - Fácil manutenção e expansão
-
-
-## 📝 Regras de Negócio Implementadas
-
-### 🔄 Fluxo de Venda
-1. Vendedor cadastra produto com informações completas
-2. Sistema gera QR Code único para o produto
-3. Comprador escaneia QR Code ou insere código manualmente
-4. Sistema exibe detalhes do produto
-5. Comprador realiza arremate com informações pessoais
-6. Produto é marcado como vendido automaticamente
-
-## 🎈 Recursos Avançados
-
-### Para Vendedores
-- 📈 Gráficos de desempenho de vendas
-- 🖨️ Geração de PDF com QR Codes para impressão
-- 🗑️ Exclusão segura de produtos cadastrados
-
-### Para Compradores
-- 📷 Scanner de QR Code com troca de câmera
-- 🔔 Notificações em tempo real
-- 📋 Histórico de compras detalhado
-
-## 📱 Compatibilidade
-
-Testado e compatível com:
-- Chrome (últimas versões)
-- Firefox (últimas versões)
-- Edge (últimas versões)
-- Safari (últimas versões)
-- Dispositivos móveis Android e iOS
-
-## 🚧 Próximas Melhorias
-
-- [ ] Autenticação de usuários
-- [ ] Integração com APIs de geolocalização
-- [ ] Sistema de avaliação de produtos
-- [ ] Compartilhamento em redes sociais
-
-
----
-
-## 👥 Equipe de Desenvolvimento
-
-| Nome | GitHub | Função |
-|------|--------|--------|
-| Raul Falluh | [1harz](https://github.com/1harz) | Frontend Developer |
-| Rodrigo Lemos | [RodrigoHLemos](https://github.com/RodrigoHLemos) | Backend Developer |
-| Rodrigo Castro | [rodrigocsc5](https://github.com/rodrigocsc5) | DataBase Developer |
-| Rafael Irvine | [Rafael-irvine](https://github.com/Rafael-irvine) | Backend Developer & Documentador |
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

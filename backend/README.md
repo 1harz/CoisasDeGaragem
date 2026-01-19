@@ -1,234 +1,98 @@
-# 🏪 Coisas de Garagem - API Backend
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-Sistema de gerenciamento de vendas de garagem (garage sale) desenvolvido em Python com FastAPI e Supabase, seguindo princípios SOLID e Domain-Driven Design (DDD).
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## 🚀 Stack Tecnológica
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-- **FastAPI**: Framework web assíncrono moderno
-- **Supabase**: Backend as a Service completo
-  - PostgreSQL (banco de dados)
-  - Auth (autenticação)
-  - Storage (armazenamento de arquivos)
-  - Realtime (websockets)
-- **SQLAlchemy**: ORM com suporte assíncrono
-- **Redis**: Cache e gerenciamento de sessões
-- **Docker**: Containerização
-- **QR Code**: Geração automática para produtos
+## Description
 
-## 📋 Arquitetura
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-Este backend segue os **princípios SOLID** e **Domain-Driven Design (DDD)**:
-
-- **Single Responsibility**: Cada classe/módulo tem apenas uma razão para mudar
-- **Open/Closed**: Aberto para extensão, fechado para modificação
-- **Liskov Substitution**: Classes derivadas devem ser substituíveis por suas classes base
-- **Interface Segregation**: Muitas interfaces específicas são melhores que uma interface geral
-- **Dependency Inversion**: Dependa de abstrações, não de implementações concretas
-
-### 📁 Estrutura do Projeto
-
-```
-backend/
-├── app/
-│   ├── api/v1/           # API REST v1
-│   │   ├── endpoints/    # Controllers (auth, products, sales, etc)
-│   │   ├── schemas/      # Schemas Pydantic para validação
-│   │   └── router.py     # Roteador principal da API
-│   ├── core/             # Configurações centrais
-│   │   └── config.py     # Gerenciamento de configurações
-│   ├── domain/           # Camada de domínio (DDD)
-│   │   ├── entities/     # Entidades de negócio
-│   │   ├── repositories/ # Interfaces de repositórios
-│   │   └── value_objects/# Objetos de valor (CPF, Email, Money, Phone)
-│   ├── infrastructure/   # Implementações de infraestrutura
-│   │   ├── database/     # Conexão com banco de dados
-│   │   ├── repositories/ # Implementações dos repositórios
-│   │   └── supabase/     # Cliente Supabase
-│   ├── services/         # Lógica de negócio
-│   │   ├── auth/         # Serviço de autenticação
-│   │   ├── product/      # Serviço de produtos
-│   │   ├── sale/         # Serviço de vendas
-│   │   └── qr_code/      # Serviço de QR codes
-│   └── shared/           # Código compartilhado
-│       └── exceptions/   # Exceções customizadas
-├── migrations/           # Migrations SQL do Supabase
-│   └── supabase/        # Scripts SQL para criação de tabelas
-├── tests/               # Testes automatizados
-├── docs/                # Documentação detalhada
-└── requirements.txt     # Dependências Python
-```
-
-## 🔧 Configuração
-
-### Pré-requisitos
-
-- Python 3.11+
-- Conta no [Supabase](https://supabase.com) (grátis)
-- Redis 7+ (opcional, para cache)
-- Docker & Docker Compose (opcional)
-
-### Instalação Rápida
-
-1. **Clone o repositório e entre no backend:**
-```bash
-git clone https://github.com/1harz/CoisasDeGaragem.git
-cd CoisasDeGaragem/backend
-```
-
-2. **Crie e ative o ambiente virtual:**
-```bash
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate  # Windows
-```
-
-3. **Instale as dependências:**
-```bash
-pip install -r requirements.txt
-```
-
-4. **Configure o Supabase:**
-   - Crie um projeto no [Supabase Dashboard](https://supabase.com)
-   - Copie as credenciais (URL, anon key, service key)
-   - **IMPORTANTE**: Desative "Confirm email" em Authentication > Providers para desenvolvimento
-
-5. **Configure o arquivo `.env`:**
-```bash
-cp .env.example .env
-# Edite .env com suas credenciais do Supabase
-```
-
-6. **Execute as migrations no Supabase:**
-   - Acesse o SQL Editor no Dashboard
-   - Execute os arquivos em ordem:
-     - `migrations/supabase/001_initial_schema.sql`
-     - `migrations/supabase/002_row_level_security.sql`
-     - `migrations/supabase/003_storage_setup.sql`
-     - `migrations/supabase/006_fix_auth_trigger_metadata.sql` (IMPORTANTE!)
-
-7. **Crie os Storage Buckets:**
-   - No Dashboard > Storage
-   - Crie 3 buckets públicos: `products`, `qr-codes`, `avatars`
-
-8. **Inicie o servidor backend:**
-```bash
-uvicorn app.main:app --reload
-```
-
-9. **Inicie o servidor frontend (em outro terminal):**
-```bash
-cd ../frontend
-python3 -m http.server 8080
-```
-
-- **Backend (API)**: `http://localhost:8000`
-- **Frontend**: `http://localhost:8080`
-- **Documentação API**: `http://localhost:8000/docs`
-
-## 📚 Documentação
-
-### API Documentation
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
-### Documentação Detalhada
-
-📁 **Documentação completa em `/docs`:**
-
-- [**ARQUITETURA.md**](docs/ARQUITETURA.md) - Explicação detalhada arquivo por arquivo
-- [**FLUXO_DE_DADOS.md**](docs/FLUXO_DE_DADOS.md) - Fluxo completo de dados no sistema
-- [**FUNCIONALIDADES.md**](docs/FUNCIONALIDADES.md) - Funcionalidades implementadas e roadmap
-- [**INTEGRACAO_SUPABASE.md**](docs/INTEGRACAO_SUPABASE.md) - Guia de integração com Supabase
-- [**SUPABASE_SETUP.md**](docs/SUPABASE_SETUP.md) - Setup completo do Supabase
-- [**DIAGRAMAS.md**](docs/DIAGRAMAS.md) - Diagramas de arquitetura e fluxo
-
-## 🎯 Funcionalidades Principais
-
-### ✅ Implementadas
-- **Autenticação com Supabase Auth**: Registro, login, tokens JWT ✅
-- **Perfil de Usuário**: CRUD completo ✅
-- **Frontend Integrado**: Modais de login/registro funcionais ✅
-- **Validação de Dados**: CPF, email, telefone ✅
-- **Trigger SQL**: Criação automática de perfis ✅
-- **CORS Configurado**: Comunicação frontend-backend ✅
-
-### 🚧 Em Desenvolvimento
-- **Gestão de Produtos**: CRUD completo com categorias
-- **Geração de QR Codes**: QR codes únicos para cada produto
-- **Sistema de Vendas**: Carrinho, checkout, histórico
-- **Upload de Imagens**: Via Supabase Storage
-- **Busca e Filtros**: Por categoria, preço, texto
-- **Row Level Security**: Segurança a nível de banco
-
-### 🚧 Em Desenvolvimento
-- Dashboard de vendedor
-- Sistema de avaliações
-- Notificações em tempo real
-- Relatórios de vendas
-- Sistema de mensagens
-
-## 🧪 Testes
+## Project setup
 
 ```bash
-# Testar autenticação
-python tests/test_auth.py
-
-# Testar conexão Supabase
-python tests/test_supabase_direct.py
-
-# Testar configuração
-python tests/test_setup.py
-
-# Executar todos os testes (quando disponível)
-pytest tests/ -v
+$ npm install
 ```
 
-## 🐳 Docker
+## Compile and run the project
 
 ```bash
-# Construir e iniciar
-docker-compose up -d
+# development
+$ npm run start
 
-# Parar serviços
-docker-compose down
+# watch mode
+$ npm run start:dev
 
-# Ver logs
-docker-compose logs -f backend
+# production mode
+$ npm run start:prod
 ```
 
-## 🔒 Segurança
+## Run tests
 
-- Autenticação JWT via Supabase
-- Row Level Security (RLS) no banco
-- Validação de entrada com Pydantic
-- Sanitização de dados
-- CORS configurado
-- Rate limiting (em desenvolvimento)
+```bash
+# unit tests
+$ npm run test
 
-## 🤝 Contribuindo
+# e2e tests
+$ npm run test:e2e
 
-1. Fork o projeto
-2. Crie uma feature branch (`git checkout -b feature/AmazingFeature`)
-3. Siga os princípios SOLID e DDD
-4. Escreva testes para novas funcionalidades
-5. Atualize a documentação
-6. Use type hints e docstrings
-7. Siga PEP 8
-8. Commit suas mudanças (`git commit -m 'Add: nova funcionalidade'`)
-9. Push para a branch (`git push origin feature/AmazingFeature`)
-10. Abra um Pull Request
+# test coverage
+$ npm run test:cov
+```
 
-## 📝 Licença
+## Deployment
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](../LICENSE) para mais detalhes.
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-## 👥 Autores
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-- **Rodrigo** - [GitHub](https://github.com/1harz)
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
+```
 
-## 🙏 Agradecimentos
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-- FastAPI por um framework incrível
-- Supabase pela infraestrutura simplificada
-- Comunidade Python pelos pacotes excelentes
+## Resources
+
+Check out a few resources that may come in handy when working with NestJS:
+
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
