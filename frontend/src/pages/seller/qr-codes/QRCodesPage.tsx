@@ -2,13 +2,13 @@ import { SellerLayout } from '@/components/seller/SellerLayout';
 import { QRCodeDisplay } from '@/components/seller/QRCodeDisplay';
 import { Button } from '@/components/common/Button';
 import { useProducts } from '@/hooks/useProducts';
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
+import { formatCurrency } from '@/utils/formatters';
 
 export default function QRCodesPage() {
   const { products } = useProducts();
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+
 
   const handleGenerateQR = (productId: string) => {
     console.log('Generate QR for product:', productId);
@@ -57,7 +57,7 @@ export default function QRCodesPage() {
                       {product.description}
                     </p>
                     <p className="text-lg font-bold text-primary mt-2">
-                      R$ {product.price.toFixed(2)}
+                      {formatCurrency(Number(product.price))}
                     </p>
                   </div>
                   {product.qrCodeUrl ? (

@@ -2,6 +2,8 @@ import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import { Card } from '@/components/common/Card';
 import type { Product } from '@/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPrint, faDownload, faQrcode } from '@fortawesome/free-solid-svg-icons';
 
 interface QRCodeDisplayProps {
   product: Product;
@@ -54,27 +56,15 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
                 />
               </div>
             ) : (
-              <div className="w-64 h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-16 h-16 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 4v1m6 11h2m-6 0h-2m4 4v12a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5"
-                  />
-                </svg>
-                <p className="text-sm text-gray-600 mt-2">QR Code não gerado</p>
+              <div className="w-64 h-64 bg-gray-50 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
+                <FontAwesomeIcon icon={faQrcode} className="text-4xl text-gray-300 mb-3" />
+                <p className="text-sm text-gray-400 font-medium">QR Code não gerado</p>
               </div>
             )}
           </div>
 
           {/* Product Details */}
-          <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+          <div className="bg-gray-50 rounded-xl p-5 space-y-3 border border-gray-100">
             <div className="flex justify-between items-start">
               <span className="text-sm text-gray-600">Preço:</span>
               <span className="text-xl font-bold text-primary">
@@ -111,26 +101,24 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
 
           {/* QR Code Info */}
           {product.qrCode && qrCodeUrl && (
-            <div className="bg-blue-50 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2m4 4v12a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5" />
-                </svg>
-                <span className="font-medium text-blue-900">Código QR:</span>
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+              <div className="flex items-center gap-2 mb-2 text-blue-700">
+                <FontAwesomeIcon icon={faQrcode} className="w-4 h-4" />
+                <span className="font-medium text-sm">Código Identificador:</span>
               </div>
-              <code className="block bg-white px-3 py-2 rounded text-sm font-mono text-blue-900 break-all">
+              <code className="block bg-white px-3 py-2 rounded border border-blue-100 text-sm font-mono text-blue-900 break-all text-center">
                 {product.qrCode}
               </code>
             </div>
           )}
-          <div className="text-xs text-gray-600 mt-2">
+
+          <div className="text-xs text-gray-500 space-y-1 px-2">
             <p>• Use este QR Code para marcar seus produtos na garagem</p>
-            <p>• Os compradores podem escanear para ver detalhes</p>
-            <p>• Cada produto tem um QR Code único</p>
+            <p>• Os compradores podem escanear para ver detalhes e comprar</p>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 pt-2">
             {onPrint && (
               <Button
                 variant="primary"
@@ -138,9 +126,7 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
                 disabled={!qrCodeUrl || loading}
                 className="flex-1"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4m2 2h10a2 2 0 002 2v4m-2 2h10a2 2 0 00-2 2v4m-2 2h10a2 2 0 00-2 2v4" />
-                </svg>
+                <FontAwesomeIcon icon={faPrint} className="mr-2" />
                 Imprimir
               </Button>
             )}
@@ -151,10 +137,8 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
                 disabled={!qrCodeUrl || loading}
                 className="flex-1"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a1 1 0 011-1h2a1 1 0 011 1v3.586a1 1 0 01.707.293 1.414L18 14l-6-6m6 6l6 6M16 16l4-2m2 2l-1.586 1.586a1 1 0 01-2.828 0L4 14m2 2l-1.586 1.586a1 1 0 01-2.828 0L16 8m-2-2l-1.586 1.586a1 1 0 01-2.828 0L16 8" />
-                </svg>
-                Baixar PNG
+                <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                Baixar
               </Button>
             )}
           </div>

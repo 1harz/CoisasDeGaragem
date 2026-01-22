@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import type { AnalyticsData } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar } from '@fortawesome/free-solid-svg-icons';
+import { formatCurrency } from '@/utils/formatters';
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -27,6 +28,7 @@ export default function AnalyticsPage() {
         productsSold: 45,
         productsListed: 12,
         uniqueBuyers: 28,
+        totalListingsValue: 1200,
       });
     }, 1000);
 
@@ -89,7 +91,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Analytics Chart */}
-        <SalesChart data={analyticsData} loading={loading} />
+        <SalesChart data={analyticsData} purchases={[]} loading={loading} />
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -104,7 +106,7 @@ export default function AnalyticsPage() {
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">Receita Total</h3>
             <p className="text-3xl font-bold text-blue-900">
-              R$ {analyticsData.totalRevenue.toFixed(2)}
+              {formatCurrency(analyticsData.totalRevenue)}
             </p>
             <p className="text-sm text-blue-700 mt-1">+23% vs mês anterior</p>
           </div>

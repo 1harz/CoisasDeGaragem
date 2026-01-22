@@ -41,7 +41,7 @@ export const mockApi = {
     const user = mockUsers.find(
       (u) => u.email === credentials.email && u.password === credentials.password,
     );
-    
+
     if (!user) {
       const error: ApiError = {
         success: false,
@@ -52,7 +52,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const success: ApiResponse<LoginResponse> = {
       success: true,
       data: {
@@ -79,7 +79,7 @@ export const mockApi = {
   register: async (data: RegisterRequest): Promise<ApiResponse<LoginResponse> | ApiError> => {
     await delay();
     const existingUser = mockUsers.find((u) => u.email === data.email);
-    
+
     if (existingUser) {
       const error: ApiError = {
         success: false,
@@ -90,7 +90,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const newUser: User = {
       id: 'user-' + Date.now(),
       email: data.email,
@@ -102,9 +102,9 @@ export const mockApi = {
       updatedAt: new Date().toISOString(),
       isActive: true,
     };
-    
+
     mockUsers.push(newUser);
-    
+
     const success: ApiResponse<LoginResponse> = {
       success: true,
       data: {
@@ -130,28 +130,28 @@ export const mockApi = {
   getProducts: async (filters?: ProductFilters): Promise<ApiResponse<{ products: Product[]; pagination: any }>> => {
     await delay();
     let filteredProducts = [...mockProducts];
-    
+
     if (filters?.sellerId) {
       filteredProducts = filteredProducts.filter((p) => p.sellerId === filters.sellerId);
     }
-    
+
     if (filters?.category) {
       filteredProducts = filteredProducts.filter((p) => p.category === filters.category);
     }
-    
+
     if (filters?.condition) {
       filteredProducts = filteredProducts.filter((p) => p.condition === filters.condition);
     }
-    
+
     if (filters?.isAvailable !== undefined) {
       filteredProducts = filteredProducts.filter((p) => p.isAvailable === filters.isAvailable);
     }
-    
+
     const page = filters?.page || 1;
     const limit = filters?.limit || 20;
     const start = (page - 1) * limit;
     const paginatedProducts = filteredProducts.slice(start, start + limit);
-    
+
     return {
       success: true,
       data: {
@@ -170,7 +170,7 @@ export const mockApi = {
   getProduct: async (id: string): Promise<ApiResponse<Product> | ApiError> => {
     await delay(200);
     const product = mockProducts.find((p) => p.id === id);
-    
+
     if (!product) {
       const error: ApiError = {
         success: false,
@@ -181,7 +181,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const success: ApiResponse<Product> = {
       success: true,
       data: product,
@@ -208,9 +208,9 @@ export const mockApi = {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
+
     mockProducts.push(newProduct);
-    
+
     return {
       success: true,
       data: newProduct,
@@ -224,7 +224,7 @@ export const mockApi = {
   ): Promise<ApiResponse<Product> | ApiError> => {
     await delay();
     const productIndex = mockProducts.findIndex((p) => p.id === id);
-    
+
     if (productIndex === -1) {
       const error: ApiError = {
         success: false,
@@ -235,13 +235,13 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     mockProducts[productIndex] = {
       ...mockProducts[productIndex],
       ...data,
       updatedAt: new Date().toISOString(),
     };
-    
+
     const success: ApiResponse<Product> = {
       success: true,
       data: mockProducts[productIndex],
@@ -253,7 +253,7 @@ export const mockApi = {
   deleteProduct: async (id: string): Promise<ApiResponse<{ message: string }> | ApiError> => {
     await delay(200);
     const productIndex = mockProducts.findIndex((p) => p.id === id);
-    
+
     if (productIndex === -1) {
       const error: ApiError = {
         success: false,
@@ -264,9 +264,9 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     mockProducts.splice(productIndex, 1);
-    
+
     return {
       success: true,
       data: {
@@ -279,7 +279,7 @@ export const mockApi = {
   getQRCode: async (productId: string): Promise<ApiResponse<any> | ApiError> => {
     await delay(200);
     const product = mockProducts.find((p) => p.id === productId);
-    
+
     if (!product) {
       const error: ApiError = {
         success: false,
@@ -290,7 +290,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     return {
       success: true,
       data: {
@@ -310,7 +310,7 @@ export const mockApi = {
   ): Promise<ApiResponse<{ product: Product; seller: User }> | ApiError> => {
     await delay(300);
     const product = mockProducts.find((p) => p.qrCode === data.qrCode);
-    
+
     if (!product) {
       const error: ApiError = {
         success: false,
@@ -321,9 +321,9 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const seller = mockUsers.find((u) => u.id === product.sellerId);
-    
+
     return {
       success: true,
       data: {
@@ -337,16 +337,16 @@ export const mockApi = {
   getPurchases: async (filters?: PurchaseFilters): Promise<ApiResponse<{ purchases: Purchase[]; pagination: any }>> => {
     await delay();
     let filteredPurchases = [...mockPurchases];
-    
+
     if (filters?.status) {
       filteredPurchases = filteredPurchases.filter((p) => p.status === filters.status);
     }
-    
+
     const page = filters?.page || 1;
     const limit = filters?.limit || 20;
     const start = (page - 1) * limit;
     const paginatedPurchases = filteredPurchases.slice(start, start + limit);
-    
+
     return {
       success: true,
       data: {
@@ -365,7 +365,7 @@ export const mockApi = {
   getPurchase: async (id: string): Promise<ApiResponse<Purchase> | ApiError> => {
     await delay(200);
     const purchase = mockPurchases.find((p) => p.id === id);
-    
+
     if (!purchase) {
       const error: ApiError = {
         success: false,
@@ -376,7 +376,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const success: ApiResponse<Purchase> = {
       success: true,
       data: purchase,
@@ -390,7 +390,7 @@ export const mockApi = {
   ): Promise<ApiResponse<Purchase> | ApiError> => {
     await delay();
     const product = mockProducts.find((p) => p.id === data.productId);
-    
+
     if (!product) {
       const error: ApiError = {
         success: false,
@@ -401,7 +401,7 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     const newPurchase: Purchase = {
       id: 'purchase-' + Date.now(),
       productId: data.productId,
@@ -415,9 +415,9 @@ export const mockApi = {
       notes: data.notes,
       qrCodeScanned: true,
     };
-    
+
     mockPurchases.push(newPurchase);
-    
+
     const success: ApiResponse<Purchase> = {
       success: true,
       data: newPurchase,
@@ -427,7 +427,7 @@ export const mockApi = {
 
   // Get analytics
   getSellerAnalytics: async (
-    params?: AnalyticsParams,
+    _params?: AnalyticsParams,
   ): Promise<ApiResponse<AnalyticsData>> => {
     await delay(300);
     return {
@@ -442,18 +442,18 @@ export const mockApi = {
   ): Promise<ApiResponse<Testimonial[]>> => {
     await delay();
     let filteredTestimonials = [...mockTestimonials];
-    
+
     if (filters?.isFeatured !== undefined) {
       filteredTestimonials = filteredTestimonials.filter((t) => t.isFeatured === filters.isFeatured);
     }
-    
+
     if (filters?.isVisible !== undefined) {
       filteredTestimonials = filteredTestimonials.filter((t) => t.isVisible === filters.isVisible);
     }
-    
+
     const limit = filters?.limit || 10;
     const paginatedTestimonials = filteredTestimonials.slice(0, limit);
-    
+
     return {
       success: true,
       data: paginatedTestimonials,
@@ -466,14 +466,14 @@ export const mockApi = {
   ): Promise<ApiResponse<Notification[]>> => {
     await delay();
     let filteredNotifications = [...mockNotifications];
-    
+
     if (filters?.isRead !== undefined) {
       filteredNotifications = filteredNotifications.filter((n) => n.isRead === filters.isRead);
     }
-    
+
     const limit = filters?.limit || 20;
     const paginatedNotifications = filteredNotifications.slice(0, limit);
-    
+
     return {
       success: true,
       data: paginatedNotifications,
@@ -484,7 +484,7 @@ export const mockApi = {
   markNotificationAsRead: async (id: string): Promise<ApiResponse<Notification> | ApiError> => {
     await delay(200);
     const notification = mockNotifications.find((n) => n.id === id);
-    
+
     if (!notification) {
       const error: ApiError = {
         success: false,
@@ -495,9 +495,9 @@ export const mockApi = {
       };
       return error;
     }
-    
+
     notification.isRead = true;
-    
+
     const success: ApiResponse<Notification> = {
       success: true,
       data: notification,
@@ -509,7 +509,7 @@ export const mockApi = {
   markAllNotificationsAsRead: async (): Promise<ApiResponse<{ message: string }>> => {
     await delay(200);
     mockNotifications.forEach((n) => (n.isRead = true));
-    
+
     return {
       success: true,
       data: {

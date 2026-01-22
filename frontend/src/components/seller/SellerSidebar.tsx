@@ -1,7 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faBox, faTags, faQrcode, faCog, faHome, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faBox, faTags, faQrcode, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { Modal } from '@/components/common/Modal';
+import { Button } from '@/components/common/Button';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SidebarItem {
   label: string;
@@ -31,7 +34,7 @@ const sidebarItems: SidebarItem[] = [
     icon: <FontAwesomeIcon icon={faQrcode} className="w-5 h-5" />,
   },
   {
-    label: 'Analytics',
+    label: 'Estatísticas',
     path: '/seller/analytics',
     icon: <FontAwesomeIcon icon={faChartBar} className="w-5 h-5" />,
   },
@@ -49,6 +52,8 @@ interface SellerSidebarProps {
 
 export function SellerSidebar({ isOpen, onToggle }: SellerSidebarProps) {
   const location = useLocation();
+  const { logout } = useAuth();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   return (
     <>
@@ -107,29 +112,49 @@ export function SellerSidebar({ isOpen, onToggle }: SellerSidebarProps) {
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200 space-y-3">
+          <div className="p-4 border-t border-gray-200">
             <button
-              onClick={() => {
-                if (window.confirm('Tem certeza que deseja sair?')) {
-                  window.location.href = '/';
-                }
-              }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium border border-red-100"
+              onClick={() => setShowLogoutModal(true)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium border border-red-100 group"
             >
-              <FontAwesomeIcon icon={faSignOutAlt} className="w-5 h-5" />
+              <FontAwesomeIcon icon={faSignOutAlt} className="w-5 h-5 group-hover:scale-110 transition-transform" />
               <span>Sair da Conta</span>
             </button>
-
-            <Link
-              to="/"
-              className="flex items-center gap-3 text-gray-600 hover:text-gray-900 text-base font-medium justify-center py-3 hover:bg-gray-50 rounded-lg transition-colors"
-            >
-              <FontAwesomeIcon icon={faHome} className="w-5 h-5" />
-              <span>Voltar para Home</span>
-            </Link>
           </div>
         </div>
       </aside>
+
+      {/* Logout Confirmation Modal */}
+      <Modal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        title="Sair da Conta"
+        size="sm"
+      >
+        <div className="space-y-6">
+          <p className="text-gray-600">
+            Tem certeza que deseja sair da sua conta? Você precisará fazer login novamente para acessar o painel.
+          </p>
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="tertiary"
+              onClick={() => setShowLogoutModal(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              className="bg-red-600 hover:bg-red-700 text-white border-none"
+              onClick={() => {
+                logout();
+                setShowLogoutModal(false);
+              }}
+            >
+              Sim, Sair
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

@@ -127,6 +127,7 @@ export interface AnalyticsData {
   productsSold: number;
   productsListed: number;
   uniqueBuyers: number;
+  totalListingsValue: number;
 }
 
 // Notification Types
