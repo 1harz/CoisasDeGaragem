@@ -10,14 +10,22 @@ import { Pagination } from '@/components/common/Pagination';
 import { useProducts } from '@/hooks/useProducts';
 import { api } from '@/services/api';
 import { useProductsStore } from '@/store/productsStore';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Product, CreateProductRequest, UpdateProductRequest } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faBox, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faBoxOpen,
+  faSearch
+} from '@fortawesome/free-solid-svg-icons';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 export default function ProductsPage() {
   const { products, fetchProducts } = useProducts();
   const { addProduct, updateProduct, deleteProduct } = useProductsStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,6 +86,20 @@ export default function ProductsPage() {
     };
     loadProducts();
   });
+
+  // Animations
+  useGSAP(() => {
+    if (!isLoading && containerRef.current && paginatedProducts.length > 0) {
+      gsap.from('.product-card-item', {
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'power2.out',
+        clearProps: 'all'
+      });
+    }
+  }, { dependencies: [isLoading, currentPage, searchTerm, sortBy, sortOrder], scope: containerRef });
 
   const handleCreate = () => {
     setEditingProduct(undefined);
@@ -147,21 +169,35 @@ export default function ProductsPage() {
     }
   };
 
+  useGSAP(() => {
+    if (showForm) {
+      gsap.from('.product-form-container', {
+        y: 20,
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power2.out'
+      });
+    }
+  }, [showForm]);
+
   if (showForm) {
     return (
       <SellerLayout>
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto product-form-container">
           <div className="mb-6">
-            <Button variant="tertiary" onClick={() => setShowForm(false)}>
+            <Button variant="tertiary" onClick={() => setShowForm(false)} className="hover:bg-blue-50 text-[#4169E1]">
               ← Voltar para Lista
             </Button>
           </div>
           {formError && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800">{formError}</p>
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl shadow-sm">
+              <p className="text-red-800 font-medium">{formError}</p>
             </div>
           )}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {editingProduct ? 'Editar Produto' : 'Novo Produto'}
+            </h2>
             <ProductForm
               product={editingProduct}
               onSubmit={handleSubmit}
@@ -174,134 +210,174 @@ export default function ProductsPage() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <SellerLayout>
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-            <p className="mt-4 text-gray-600">Carregando produtos...</p>
-          </div>
-        </div>
-      </SellerLayout>
-    );
-  }
-
-  if (error) {
-    return (
-      <SellerLayout>
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-red-900 mb-2">Erro ao carregar produtos</h2>
-            <p className="text-red-700">{error}</p>
-            <Button variant="primary" onClick={() => fetchProducts()} className="mt-4">
-              Tentar novamente
-            </Button>
-          </div>
-        </div>
-      </SellerLayout>
-    );
-  }
-
   return (
     <SellerLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+      <div ref={containerRef} className="space-y-8">
+        {/* Header Section */}
+        <div className="bg-gradient-to-r from-[#4169E1] to-[#0047AB] rounded-2xl shadow-xl p-8 text-white relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full transform translate-x-1/3 -translate-y-1/3 blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full transform -translate-x-1/3 translate-y-1/3 blur-2xl pointer-events-none"></div>
+
+          <div className="relative z-10">
+            <h1 className="text-3xl font-bold mb-2 tracking-tight">
               Meus Produtos
             </h1>
-            <p className="text-gray-600">
-              Gerencie seus produtos cadastrados para venda na garagem
+            <p className="text-blue-100 text-lg">
+              Gerencie todo o inventário da sua garagem em um só lugar
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Input
-              type="search"
-              placeholder="Buscar produtos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="min-w-[200px]"
-            />
-            <Select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'date')}
-              className="min-w-[150px]"
-              options={[
-                { value: 'name', label: 'Nome' },
-                { value: 'price', label: 'Preço' },
-                { value: 'date', label: 'Data' },
-              ]}
-            />
-            <Select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-              className="min-w-[120px]"
-              options={[
-                { value: 'asc', label: 'A-Z' },
-                { value: 'desc', label: 'Z-A' },
-              ]}
-            />
-            <Button variant="primary" onClick={handleCreate}>
-              <FontAwesomeIcon icon={faPlus} className="w-5 h-5 mr-2" />
+
+          <div className="relative z-10">
+            <Button
+              variant="tertiary"
+              onClick={handleCreate}
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/40 backdrop-blur-sm shadow-lg whitespace-nowrap"
+            >
+              <FontAwesomeIcon icon={faPlus} className="w-4 h-4 mr-2" />
               Novo Produto
             </Button>
           </div>
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {paginatedProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onGenerateQR={handleGenerateQR}
-            />
-          ))}
+        {/* Filters Bar */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-1 bg-gray-50 border-b border-gray-100 px-4 py-2 flex items-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <FontAwesomeIcon icon={faSearch} className="mr-2" />
+            Filtros e Pesquisa
+          </div>
+          <div className="p-4 flex flex-col lg:flex-row gap-4">
+            {/* Search */}
+            <div className="flex-1">
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#4169E1] transition-colors">
+                  <FontAwesomeIcon icon={faSearch} />
+                </div>
+                <Input
+                  type="search"
+                  placeholder="Buscar por nome, descrição..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 w-full border-gray-200 focus:border-[#4169E1] focus:ring-[#4169E1] bg-white transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
+            {/* Selects */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              <div className="flex-1 sm:w-44">
+                <Select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'date')}
+                  options={[
+                    { value: 'name', label: 'Nome' },
+                    { value: 'price', label: 'Preço' },
+                    { value: 'date', label: 'Data' },
+                  ]}
+                  className="w-full border-gray-200 focus:border-[#4169E1] focus:ring-[#4169E1]"
+                />
+              </div>
+              <div className="flex-1 sm:w-48">
+                <Select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+                  options={[
+                    { value: 'asc', label: 'Crescente (A-Z)' },
+                    { value: 'desc', label: 'Decrescente (Z-A)' },
+                  ]}
+                  className="w-full border-gray-200 focus:border-[#4169E1] focus:ring-[#4169E1]"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-6">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              pageSize={pageSize}
-              totalItems={filteredProducts.length}
-            />
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4169E1] mb-4"></div>
+            <p className="text-gray-500">Carregando seus produtos...</p>
           </div>
         )}
 
-        {/* Empty State */}
-        {filteredProducts.length === 0 && products.length > 0 && (
-          <div className="text-center py-12">
-            <FontAwesomeIcon icon={faBox} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Nenhum produto encontrado
-            </h3>
-            <p className="text-gray-600">
-              Tente buscar com outros termos
-            </p>
-          </div>
-        )}
-
-        {/* Empty State - No Products */}
-        {products.length === 0 && (
-          <div className="text-center py-12">
-            <FontAwesomeIcon icon={faBoxOpen} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Nenhum produto cadastrado
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Comece adicionando seus produtos para vender na sua garagem
-            </p>
-            <Button variant="primary" onClick={handleCreate}>
-              Adicionar Primeiro Produto
+        {/* Error State */}
+        {!isLoading && error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
+            <h2 className="text-xl font-bold text-red-800 mb-2">Ops! Ocorreu um erro.</h2>
+            <p className="text-red-600 mb-6">{error}</p>
+            <Button variant="primary" onClick={() => fetchProducts()} className="bg-red-600 hover:bg-red-700 text-white">
+              Tentar novamente
             </Button>
+          </div>
+        )}
+
+        {/* Products Grid */}
+        {!isLoading && !error && filteredProducts.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedProducts.map((product) => (
+                <div key={product.id} className="product-card-item h-full">
+                  <ProductCard
+                    product={product}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onGenerateQR={handleGenerateQR}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  pageSize={pageSize}
+                  totalItems={filteredProducts.length}
+                />
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Empty States */}
+        {!isLoading && !error && filteredProducts.length === 0 && (
+          <div className="bg-white rounded-2xl shadow-sm border border-dashed border-gray-200 p-12 text-center">
+            {products.length > 0 ? (
+              // Found nothing in search
+              <>
+                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
+                  <FontAwesomeIcon icon={faSearch} className="text-3xl" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Nenhum produto encontrado
+                </h3>
+                <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                  Não encontramos resultados para "{searchTerm}". Tente termos diferentes ou limpe os filtros.
+                </p>
+                <Button variant="secondary" onClick={() => setSearchTerm('')}>
+                  Limpar Busca
+                </Button>
+              </>
+            ) : (
+              // No products at all
+              <>
+                <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-[#4169E1]">
+                  <FontAwesomeIcon icon={faBoxOpen} className="text-3xl" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Vamos começar?
+                </h3>
+                <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+                  Você ainda não tem produtos cadastrados. Adicione seu primeiro item para começar a vender!
+                </p>
+                <Button variant="primary" onClick={handleCreate} className="bg-[#4169E1] hover:bg-[#0047AB] text-white px-8 py-3 text-lg h-auto shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Adicionar Primeiro Produto
+                </Button>
+              </>
+            )}
           </div>
         )}
 

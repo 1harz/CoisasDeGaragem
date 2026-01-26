@@ -2,7 +2,7 @@ import { BuyerLayout } from '@/components/buyer/BuyerLayout';
 import { PurchaseCard } from '@/components/buyer/PurchaseCard';
 import { usePurchases } from '@/hooks/usePurchases';
 import { Spinner } from '@/components/common/Spinner';
-import { Alert } from '@/components/common/Alert';
+
 import { Input } from '@/components/common/Input';
 import { Select } from '@/components/common/Select';
 import { Pagination } from '@/components/common/Pagination';
@@ -15,7 +15,7 @@ export default function PurchasesPage() {
   const { purchases, fetchPurchases } = usePurchases();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
+  // const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<'date' | 'status' | 'price'>('date');
@@ -70,7 +70,8 @@ export default function PurchasesPage() {
   }, [fetchPurchases]);
 
   const handleViewDetails = (purchase: Purchase) => {
-    setSelectedPurchase(purchase);
+    // setSelectedPurchase(purchase);
+    console.log('View details for order:', purchase.id);
   };
 
   if (isLoading) {

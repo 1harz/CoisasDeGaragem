@@ -164,6 +164,7 @@ export const mockAnalyticsData: AnalyticsData = {
   productsSold: 8,
   productsListed: 15,
   uniqueBuyers: 10,
+  totalListingsValue: 2500.0,
 };
 
 // Mock Notifications

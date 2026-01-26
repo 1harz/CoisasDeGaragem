@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { api } from '@/services/api';
 
 export function useAuth() {
   const { user, token, isAuthenticated, login, logout, updateUser } = useAuthStore();
   const navigate = useNavigate();
-  const location = useLocation();
+
 
   const handleLogin = useCallback(
     async (email: string, password: string) => {

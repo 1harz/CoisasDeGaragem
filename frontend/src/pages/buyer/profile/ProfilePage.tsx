@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (data: { name?: string; phone?: string; avatarUrl?: string }) => {
+  const handleSubmit = async (_data: { name?: string; phone?: string; avatarUrl?: string }) => {
     setIsLoading(true);
     setError('');
     setSuccess('');
