@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { BrowserQRCodeReader, Result } from '@zxing/library';
 import { Alert } from '@/components/common/Alert';
 import { Spinner } from '@/components/common/Spinner';
 import { Button } from '@/components/common/Button';
 import type { Product, User } from '@/types';
-import { faQrcode, faExclamationTriangle, faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, faExclamationTriangle, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface QRScannerProps {
@@ -13,19 +14,29 @@ interface QRScannerProps {
 export function QRScanner({ onScanSuccess }: QRScannerProps) {
   const [error, setError] = useState('');
   const [isScanning, setIsScanning] = useState(false);
-  const [hasPermission, setHasPermission] = useState(false);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [isCameraActive, setIsCameraActive] = useState(false);
 
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const codeReaderRef = useRef<BrowserQRCodeReader | null>(null);
+
+
+  // Check camera permission
   useEffect(() => {
-    // Check for camera permission
-    const checkPermission = async () => {
+    const checkCameraPermission = async () => {
       try {
+        // Just check permission, don't keep the stream open
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'environment' }
         });
+
         setHasPermission(true);
-        // Stop stream immediately after checking
+        // Immediately stop the test stream
         stream.getTracks().forEach(track => track.stop());
+
+        // Signal that camera is ready
+        setIsCameraActive(true);
       } catch (err) {
         if (err instanceof Error) {
           if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
@@ -42,8 +53,80 @@ export function QRScanner({ onScanSuccess }: QRScannerProps) {
       }
     };
 
-    checkPermission();
+    checkCameraPermission();
+
+    // Cleanup function
+    return () => {
+      if (codeReaderRef.current) {
+        codeReaderRef.current.reset();
+      }
+    };
   }, []);
+
+  // Start QR code scanning
+  useEffect(() => {
+    if (!videoRef.current || !isCameraActive) return;
+
+    const codeReader = new BrowserQRCodeReader();
+    codeReaderRef.current = codeReader;
+
+    let isActive = true;
+    let lastScannedCode = '';
+    let isProcessing = false;
+
+    const startScanning = async () => {
+      try {
+        // Use decodeFromConstraints to start continuous scanning
+        const constraints = {
+          video: { facingMode: 'environment' }
+        };
+
+        await codeReader.decodeFromConstraints(
+          constraints,
+          videoRef.current!,
+          (result, error) => {
+            if (!isActive) return;
+
+            if (result && !isProcessing) {
+              const scannedText = result.getText();
+              console.log('QR Code detected:', scannedText);
+
+              // Prevent scanning the same code multiple times
+              if (scannedText !== lastScannedCode) {
+                lastScannedCode = scannedText;
+                isProcessing = true;
+
+                handleScan(scannedText).finally(() => {
+                  // Allow scanning again after 3 seconds
+                  setTimeout(() => {
+                    isProcessing = false;
+                    lastScannedCode = '';
+                  }, 3000);
+                });
+              }
+            }
+
+            // Optionally log errors for debugging
+            if (error && !(error.name === 'NotFoundException')) {
+              console.debug('Scanner error (normal):', error.message);
+            }
+          }
+        );
+      } catch (err) {
+        console.error('Error starting QR scanner:', err);
+        if (isActive) {
+          setError('Erro ao iniciar scanner. Tente recarregar a página.');
+        }
+      }
+    };
+
+    startScanning();
+
+    return () => {
+      isActive = false;
+      codeReader.reset();
+    };
+  }, [isCameraActive]);
 
   const handleScan = async (qrCode: string) => {
     setIsScanning(true);
@@ -73,16 +156,33 @@ export function QRScanner({ onScanSuccess }: QRScannerProps) {
     }
   };
 
-  if (!hasPermission) {
+  const handleRetryPermission = async () => {
+    setError('');
+    setHasPermission(null);
+    window.location.reload();
+  };
+
+  // Loading state while checking permission
+  if (hasPermission === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <Spinner />
+        <p className="mt-4 text-gray-600">Solicitando acesso à câmera...</p>
+      </div>
+    );
+  }
+
+  // Permission denied state
+  if (!hasPermission) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-6">
         {error && (
           <Alert variant="error" dismissible onDismiss={() => setError('')}>
             {error}
           </Alert>
         )}
         <div className="text-center">
-          <FontAwesomeIcon icon={faExclamationTriangle} className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+          <FontAwesomeIcon icon={faExclamationTriangle} className="w-16 h-16 mx-auto text-yellow-500 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
             Permissão de Câmera Necessária
           </h3>
@@ -91,8 +191,9 @@ export function QRScanner({ onScanSuccess }: QRScannerProps) {
           </p>
           <Button
             variant="primary"
-            onClick={() => window.location.reload()}
+            onClick={handleRetryPermission}
           >
+            <FontAwesomeIcon icon={faCamera} className="mr-2" />
             Solicitar Permissão
           </Button>
         </div>
@@ -110,53 +211,98 @@ export function QRScanner({ onScanSuccess }: QRScannerProps) {
 
       {isScanning && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <Spinner />
+          <div className="text-center">
+            <Spinner />
+            <p className="text-white mt-4">Processando QR code...</p>
+          </div>
         </div>
       )}
 
       <div className="relative w-full max-w-2xl mx-auto">
-        {/* QR Scanner placeholder */}
+        {/* QR Scanner with live camera feed */}
         <div className="bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
-          <div className="aspect-square flex items-center justify-center">
-            <div className="text-center text-white p-8">
-              <FontAwesomeIcon icon={faQrcode} className="w-24 h-24 mx-auto mb-4 opacity-50" />
-              <p className="text-lg mb-4">
-                Posicione o QR code dentro da área de scan
-              </p>
-              <p className="text-sm text-gray-300 mb-6">
-                O QR code será escaneado automaticamente
-              </p>
-              <div className="bg-white/10 rounded-lg p-4 border-2 border-dashed border-white/30">
-                <div className="w-48 h-48 mx-auto border-2 border-white/40 rounded flex items-center justify-center relative">
-                  <FontAwesomeIcon icon={faExpand} className="w-12 h-12 text-white/50 absolute" />
-                  <div className="text-white/50 text-sm mt-16 font-medium z-10">
-                    Área de Scan
+          <div className="relative aspect-square">
+            {/* Video element for camera feed */}
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover"
+            />
+
+            {/* Overlay with scanning frame */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="relative">
+                {/* Scanning frame corners */}
+                <div className="w-64 h-64 relative">
+                  {/* Top-left corner */}
+                  <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary-500"></div>
+                  {/* Top-right corner */}
+                  <div className="absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-primary-500"></div>
+                  {/* Bottom-left corner */}
+                  <div className="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-primary-500"></div>
+                  {/* Bottom-right corner */}
+                  <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary-500"></div>
+
+                  {/* Center icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <FontAwesomeIcon
+                      icon={faQrcode}
+                      className="w-16 h-16 text-white/50 drop-shadow-lg"
+                    />
                   </div>
                 </div>
               </div>
-              {/* Manual QR code input for testing */}
-              <div className="mt-6">
-                <label htmlFor="manual-qr" className="block text-sm text-gray-300 mb-2">
-                  Ou digite o QR code manualmente (para testes):
-                </label>
-                <input
-                  id="manual-qr"
-                  type="text"
-                  placeholder="Digite o código QR aqui..."
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
-                  onKeyPress={async (e) => {
-                    if (e.key === 'Enter') {
-                      const target = e.target as HTMLInputElement;
-                      if (target.value.trim()) {
-                        handleScan(target.value.trim());
-                        target.value = '';
-                      }
-                    }
-                  }}
-                />
+            </div>
+
+            {/* Status indicator */}
+            <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
+              <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span className="text-white text-sm font-medium">Câmera Ativa</span>
+              </div>
+              {isCameraActive && (
+                <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2">
+                  <FontAwesomeIcon icon={faCamera} className="text-white text-sm" />
+                </div>
+              )}
+            </div>
+
+            {/* Instructions */}
+            <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+              <div className="bg-black/60 backdrop-blur-sm rounded-lg px-4 py-3 text-center">
+                <p className="text-white text-sm font-medium">
+                  Posicione o QR code dentro da moldura
+                </p>
+                <p className="text-white/70 text-xs mt-1">
+                  O código será escaneado automaticamente
+                </p>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Manual input for testing */}
+        <div className="mt-4 bg-white rounded-lg shadow p-4">
+          <label htmlFor="manual-qr" className="block text-sm font-medium text-gray-700 mb-2">
+            Ou digite o QR code manualmente (para testes):
+          </label>
+          <input
+            id="manual-qr"
+            type="text"
+            placeholder="Digite o código QR aqui..."
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            onKeyPress={async (e) => {
+              if (e.key === 'Enter') {
+                const target = e.target as HTMLInputElement;
+                if (target.value.trim()) {
+                  handleScan(target.value.trim());
+                  target.value = '';
+                }
+              }
+            }}
+          />
         </div>
       </div>
     </div>

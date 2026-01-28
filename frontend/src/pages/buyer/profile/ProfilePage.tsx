@@ -4,6 +4,16 @@ import { useAuthStore } from '@/store/authStore';
 import { Spinner } from '@/components/common/Spinner';
 import { Alert } from '@/components/common/Alert';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faUserCog,
+  faEnvelope,
+  faUserTag,
+  faCalendar,
+  faCheckCircle,
+  faTimesCircle,
+  faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function ProfilePage() {
   const { user, logout } = useAuthStore();
@@ -43,10 +53,11 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <FontAwesomeIcon icon={faUserCog} className="text-primary" />
             Configurações de Perfil
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mt-2">
             Atualize suas informações de conta
           </p>
         </div>
@@ -78,16 +89,25 @@ export default function ProfilePage() {
             Informações da Conta
           </h2>
           <div className="space-y-3">
-            <div className="flex justify-between py-2 border-b border-gray-200">
-              <span className="text-gray-600">Email:</span>
+            <div className="flex justify-between py-2 border-b border-gray-200 items-center">
+              <span className="text-gray-600 flex items-center gap-2">
+                <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 w-4" />
+                Email:
+              </span>
               <span className="font-medium text-gray-900">{user.email}</span>
             </div>
-            <div className="flex justify-between py-2 border-b border-gray-200">
-              <span className="text-gray-600">Tipo de Conta:</span>
+            <div className="flex justify-between py-2 border-b border-gray-200 items-center">
+              <span className="text-gray-600 flex items-center gap-2">
+                <FontAwesomeIcon icon={faUserTag} className="text-gray-400 w-4" />
+                Tipo de Conta:
+              </span>
               <span className="font-medium text-primary capitalize">{user.role === 'buyer' ? 'Comprador' : 'Vendedor'}</span>
             </div>
-            <div className="flex justify-between py-2 border-b border-gray-200">
-              <span className="text-gray-600">Data de Cadastro:</span>
+            <div className="flex justify-between py-2 border-b border-gray-200 items-center">
+              <span className="text-gray-600 flex items-center gap-2">
+                <FontAwesomeIcon icon={faCalendar} className="text-gray-400 w-4" />
+                Data de Cadastro:
+              </span>
               <span className="font-medium text-gray-900">
                 {new Date(user.createdAt).toLocaleDateString('pt-BR', {
                   year: 'numeric',
@@ -97,14 +117,26 @@ export default function ProfilePage() {
               </span>
             </div>
             {user.isActive ? (
-              <div className="flex justify-between py-2">
-                <span className="text-gray-600">Status da Conta:</span>
-                <span className="font-medium text-green-600">Ativa</span>
+              <div className="flex justify-between py-2 items-center">
+                <span className="text-gray-600 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 w-4" />
+                  Status da Conta:
+                </span>
+                <span className="font-medium text-green-600 flex items-center gap-1">
+                  <FontAwesomeIcon icon={faCheckCircle} className="w-4" />
+                  Ativa
+                </span>
               </div>
             ) : (
-              <div className="flex justify-between py-2">
-                <span className="text-gray-600">Status da Conta:</span>
-                <span className="font-medium text-red-600">Inativa</span>
+              <div className="flex justify-between py-2 items-center">
+                <span className="text-gray-600 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faTimesCircle} className="text-red-500 w-4" />
+                  Status da Conta:
+                </span>
+                <span className="font-medium text-red-600 flex items-center gap-1">
+                  <FontAwesomeIcon icon={faTimesCircle} className="w-4" />
+                  Inativa
+                </span>
               </div>
             )}
           </div>
@@ -117,8 +149,9 @@ export default function ProfilePage() {
                 window.location.href = '/';
               }
             }}
-            className="w-full mt-6 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+            className="w-full mt-6 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center gap-2"
           >
+            <FontAwesomeIcon icon={faRightFromBracket} />
             Sair da Conta
           </button>
         </div>

@@ -3,6 +3,8 @@ import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { Alert } from '@/components/common/Alert';
 import type { User } from '@/types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 interface ProfileFormProps {
   user: User;
@@ -64,16 +66,11 @@ export function ProfileForm({ user, onSubmit, isLoading }: ProfileFormProps) {
             />
           ) : (
             <div className="w-24 h-24 rounded-full bg-gray-200 border-4 border-gray-300 flex items-center justify-center">
-              <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0v4m0 0l-8 4m16-4v2m0 0l-8 4m16-4v2m0 0l-8 4m-4 4v16a2 2 0 002 2h6a2 2 0 002-2V6l-3.5-2.5M13 13V6m0 0l-3.5-2.5M13 13l3.5 2.5M13 13v-7.5l-3.5-2.5M13 13l3.5 2.5" />
-              </svg>
+              <FontAwesomeIcon icon={faUser} className="w-12 h-12 text-gray-400" />
             </div>
           )}
         </div>
         <div className="flex-1">
-          <p className="text-sm text-gray-600 mb-2">
-            URL da foto de perfil
-          </p>
           <Input
             id="avatarUrl"
             type="url"
