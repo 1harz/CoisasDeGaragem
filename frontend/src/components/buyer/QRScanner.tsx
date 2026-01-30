@@ -3,6 +3,7 @@ import { BrowserQRCodeReader } from '@zxing/library';
 import { Alert } from '@/components/common/Alert';
 import { Spinner } from '@/components/common/Spinner';
 import { Button } from '@/components/common/Button';
+import { api } from '@/services/api';
 import type { Product, User } from '@/types';
 import { faQrcode, faExclamationTriangle, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -128,23 +129,21 @@ export function QRScanner({ onScanSuccess }: QRScannerProps) {
     };
   }, [isCameraActive]);
 
-  const handleScan = async (qrCode: string) => {
+  const handleScan = async (scannedText: string) => {
     setIsScanning(true);
     setError('');
+
+    // Extract ID from URL if scanned text is a URL
+    let qrCode = scannedText;
+    if (scannedText.includes('/product/')) {
+      const parts = scannedText.split('/product/');
+      qrCode = parts[parts.length - 1].split('?')[0].split('#')[0];
+    }
+
     try {
-      // Call API to scan QR code
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/qr-codes/scan`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ qrCode }),
-      });
+      const result = await api.scanQRCode({ qrCode });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (result.success) {
         onScanSuccess(result.data.product, result.data.seller);
       } else {
         setError(result.error?.message || 'QR code inválido ou produto não encontrado');

@@ -29,11 +29,6 @@ const sidebarItems: SidebarItem[] = [
     icon: <FontAwesomeIcon icon={faTags} className="w-5 h-5" />,
   },
   {
-    label: 'QR Codes',
-    path: '/seller/qr-codes',
-    icon: <FontAwesomeIcon icon={faQrcode} className="w-5 h-5" />,
-  },
-  {
     label: 'Estatísticas',
     path: '/seller/analytics',
     icon: <FontAwesomeIcon icon={faChartBar} className="w-5 h-5" />,

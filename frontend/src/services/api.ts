@@ -58,6 +58,7 @@ async function fetchApi<T>(
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error(`API Error [${endpoint}]:`, response.status, errorData);
       return {
         success: false,
         error: {
@@ -195,6 +196,39 @@ export const api = {
     });
   },
 
+  reserveProduct: async (id: string): Promise<ApiResult<Product>> => {
+    if (ENABLE_MOCK_DATA) {
+      return mockApi.updateProduct(id, { isAvailable: false, isReserved: true } as any);
+    }
+    return fetchApi<Product>(`/products/${id}/reserve`, {
+      method: 'PATCH',
+    });
+  },
+
+  unreserveProduct: async (id: string): Promise<ApiResult<Product>> => {
+    if (ENABLE_MOCK_DATA) {
+      return mockApi.updateProduct(id, { isAvailable: true, isReserved: false } as any);
+    }
+    return fetchApi<Product>(`/products/${id}/unreserve`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+  },
+
+  markProductAsSold: async (id: string): Promise<ApiResult<Product>> => {
+    if (ENABLE_MOCK_DATA) {
+      return mockApi.updateProduct(id, { isAvailable: false, isReserved: false, isSold: true } as any);
+    }
+    return fetchApi<Product>(`/products/${id}/sold`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+  },
+
   deleteProduct: async (id: string): Promise<ApiResult<{ message: string }>> => {
     if (ENABLE_MOCK_DATA) {
       return mockApi.deleteProduct(id);
@@ -285,12 +319,22 @@ export const api = {
     if (ENABLE_MOCK_DATA) {
       return mockApi.createPurchase(data);
     }
+
+    // Explicitly build the payload to avoid sending extra fields like qrCode
+    const payload = {
+      productId: data.productId,
+      paymentMethod: data.paymentMethod?.toUpperCase(),
+      notes: data.notes,
+    };
+
+    console.log('Sending purchase payload:', payload);
+
     return fetchApi<Purchase>('/purchases', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
   },
 
