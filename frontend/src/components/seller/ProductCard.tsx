@@ -3,13 +3,15 @@ import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import type { Product } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faQrcode, faImage, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faQrcode, faImage, faCalendar, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
 interface ProductCardProps {
   product: Product;
   onEdit?: (product: Product) => void;
   onDelete?: (productId: string) => void;
   onGenerateQR?: (product: Product) => void;
+  onDownloadPDF?: (product: Product) => void;
+  onStatusChange?: (productId: string, status: 'available' | 'reserved' | 'sold') => void;
   showActions?: boolean;
 }
 
@@ -18,6 +20,8 @@ export function ProductCard({
   onEdit,
   onDelete,
   onGenerateQR,
+  onDownloadPDF,
+  onStatusChange,
   showActions = true,
 }: ProductCardProps) {
   const getConditionBadge = (condition?: string) => {
@@ -53,11 +57,11 @@ export function ProductCard({
         {/* Status Badge */}
         <div className="absolute top-3 right-3 shadow-sm z-10">
           {product.isSold ? (
-            <Badge variant="error" className="shadow-sm font-medium px-3">Vendido</Badge>
-          ) : !product.isAvailable ? (
-            <Badge variant="warning" className="shadow-sm font-medium px-3">Indisponível</Badge>
+            <Badge variant="error" className="shadow-lg font-bold px-3">Vendido</Badge>
+          ) : product.isReserved ? (
+            <Badge variant="warning" className="shadow-lg font-bold px-3">Reservado</Badge>
           ) : (
-            <Badge variant="success" className="shadow-sm font-medium px-3">Disponível</Badge>
+            <Badge variant="success" className="shadow-lg font-bold px-3">Disponível</Badge>
           )}
         </div>
 
@@ -96,6 +100,32 @@ export function ProductCard({
           {product.description}
         </p>
 
+        {/* Status Actions for Seller */}
+        {showActions && onStatusChange && (
+          <div className="flex gap-2 mb-4">
+            {!product.isAvailable && !product.isSold && (
+              <Button
+                variant="tertiary"
+                size="sm"
+                className="flex-1 text-xs py-1 border-emerald-100 hover:bg-emerald-50 text-emerald-700"
+                onClick={() => onStatusChange(product.id, 'available')}
+              >
+                Disponibilizar
+              </Button>
+            )}
+            {!product.isSold && (
+              <Button
+                variant="tertiary"
+                size="sm"
+                className="flex-1 text-xs py-1 border-red-100 hover:bg-red-50 text-red-700"
+                onClick={() => onStatusChange(product.id, 'sold')}
+              >
+                Marcar Vendido
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* Meta Info */}
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 text-xs text-gray-500">
           <div className="flex items-center gap-2">
@@ -106,9 +136,9 @@ export function ProductCard({
           </div>
 
           {product.qrCodeUrl && (
-            <div className="flex items-center gap-1.5 text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-md">
+            <div className="flex items-center gap-1.5 text-[#4169E1] font-medium bg-blue-50 px-2 py-1 rounded-md">
               <FontAwesomeIcon icon={faQrcode} />
-              <span>QR Ativo</span>
+              <span>Link Ativo</span>
             </div>
           )}
         </div>
@@ -116,7 +146,7 @@ export function ProductCard({
 
       {/* Actions */}
       {showActions && (
-        <div className="p-4 bg-gray-50/80 border-t border-gray-100 grid grid-cols-3 gap-2 backdrop-blur-sm">
+        <div className="p-4 bg-gray-50/80 border-t border-gray-100 grid grid-cols-4 gap-2 backdrop-blur-sm">
           {onEdit && (
             <Button
               variant="tertiary"
@@ -140,6 +170,18 @@ export function ProductCard({
               title={product.qrCodeUrl ? "Ver QR Code" : "Gerar QR Code"}
             >
               <FontAwesomeIcon icon={faQrcode} />
+            </Button>
+          )}
+          {onDownloadPDF && (
+            <Button
+              variant="tertiary"
+              size="sm"
+              onClick={() => onDownloadPDF(product)}
+              disabled={!product.qrCodeUrl}
+              className={`flex items-center justify-center bg-white text-red-600 hover:text-red-700 hover:border-red-500 transition-colors shadow-sm ${!product.qrCodeUrl ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
+              title="Baixar Etiqueta PDF"
+            >
+              <FontAwesomeIcon icon={faFilePdf} />
             </Button>
           )}
           {onDelete && (

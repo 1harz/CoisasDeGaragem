@@ -16,24 +16,33 @@ export class QrCodesController {
         if (!product) {
             throw new NotFoundException('Product not found');
         }
-        // Return mock Base64 QR code or generate one
-        // Ideally we use a lib `qrcode`. For now, return a placeholder or generate simple one.
-        // The frontend actually expects an IMAGE URL or Base64? Api says `getQRCode` returns `any`.
-        // Mockapi returns: url: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=...'
-        // So let's return that.
+        // Return Base64 QR code pointing to the frontend product page
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const productUrl = `${frontendUrl}/product/${product.id}`;
+
         return {
-            url: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${product.qrCode}`,
-            code: product.qrCode
+            url: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(productUrl)}`,
+            code: product.qrCode,
+            productUrl
         };
     }
 
     @Post('scan')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    async scanQRCode(@Body() data: { content: string }) {
-        const product = await this.prisma.product.findUnique({
-            where: { qrCode: data.content },
+    async scanQRCode(@Body() data: { qrCode: string }) {
+        // Try to find by qrCode field first
+        let product = await this.prisma.product.findUnique({
+            where: { qrCode: data.qrCode },
             include: { seller: true }
         });
+
+        // If not found, try to find by ID (in case the QR code contains the product ID)
+        if (!product) {
+            product = await this.prisma.product.findUnique({
+                where: { id: data.qrCode },
+                include: { seller: true }
+            });
+        }
 
         if (!product) {
             throw new NotFoundException('Invalid QR Code');

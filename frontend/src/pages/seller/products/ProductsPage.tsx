@@ -20,13 +20,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { generateProductPDF } from '@/utils/pdfGenerator';
+
+import { useLocation } from 'react-router-dom';
 
 export default function ProductsPage() {
   const { products, fetchProducts } = useProducts();
   const { addProduct, updateProduct, deleteProduct } = useProductsStore();
   const containerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(location.state?.showForm || false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -132,12 +136,55 @@ export default function ProductsPage() {
     try {
       const result = await api.getQRCode(product.id);
       if (result.success) {
-        setQrProduct(product);
+        // Update product in local state to have the qrCodeUrl if it didn't have it
+        const updatedProduct = { ...product, qrCodeUrl: result.data.url };
+        updateProduct(product.id, updatedProduct);
+        setQrProduct(updatedProduct);
       } else {
         alert(result.error?.message || 'Erro ao gerar QR code');
       }
     } catch (err) {
       alert('Erro ao gerar QR code');
+    }
+  };
+
+  const handleDownloadPDF = async (product: Product) => {
+    if (!product.qrCodeUrl) {
+      alert('Gere o QR Code antes de baixar o PDF');
+      return;
+    }
+
+    try {
+      await generateProductPDF({
+        name: product.name,
+        price: product.price,
+        currency: product.currency,
+        qrCodeUrl: product.qrCodeUrl,
+        category: product.category
+      });
+    } catch (err) {
+      alert('Erro ao gerar PDF');
+    }
+  };
+
+  const handleStatusChange = async (productId: string, status: 'available' | 'reserved' | 'sold') => {
+    try {
+      let result;
+      if (status === 'available') {
+        result = await api.unreserveProduct(productId);
+      } else if (status === 'sold') {
+        result = await api.markProductAsSold(productId);
+      } else {
+        return;
+      }
+
+      if (result.success) {
+        updateProduct(productId, result.data);
+      } else {
+        alert(result.error?.message || 'Erro ao alterar status');
+      }
+    } catch (err) {
+      alert('Erro ao alterar status');
     }
   };
 
@@ -156,6 +203,16 @@ export default function ProductsPage() {
       } else {
         const result = await api.createProduct(data as CreateProductRequest);
         if (result.success) {
+          // After creating, automatically try to get QR code
+          try {
+            const qrResult = await api.getQRCode(result.data.id);
+            if (qrResult.success) {
+              result.data.qrCodeUrl = qrResult.data.url;
+            }
+          } catch (qrErr) {
+            console.error('Error fetching QR after create:', qrErr);
+          }
+
           addProduct(result.data);
           setShowForm(false);
         } else {
@@ -321,6 +378,8 @@ export default function ProductsPage() {
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onGenerateQR={handleGenerateQR}
+                    onDownloadPDF={handleDownloadPDF}
+                    onStatusChange={handleStatusChange}
                   />
                 </div>
               ))}
@@ -387,8 +446,14 @@ export default function ProductsPage() {
             isOpen={!!qrProduct}
             onClose={() => setQrProduct(null)}
             title="QR Code do Produto"
+            size="md"
           >
-            <QRCodeDisplay product={qrProduct} />
+            <QRCodeDisplay
+              product={qrProduct}
+              qrCodeUrl={qrProduct.qrCodeUrl}
+              onPrint={() => window.print()}
+              onDownload={() => handleDownloadPDF(qrProduct)}
+            />
           </Modal>
         )}
       </div>

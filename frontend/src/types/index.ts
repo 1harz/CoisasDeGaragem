@@ -40,6 +40,7 @@ export interface Product {
   category?: string;
   condition?: ProductCondition;
   isAvailable: boolean;
+  isReserved: boolean;
   isSold: boolean;
   createdAt: string;
   updatedAt: string;
@@ -52,15 +53,18 @@ export type PaymentMethod = 'cash' | 'card' | 'pix' | 'other';
 export interface Purchase {
   id: string;
   productId: string;
+  product?: Product;
   buyerId: string;
   sellerId: string;
   price: number;
   currency: string;
   purchaseDate: string;
-  status: PurchaseStatus;
+  status: PurchaseStatus | string; // Allow string for backend uppercase values
   paymentMethod?: PaymentMethod;
   notes?: string;
   qrCodeScanned: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // QR Code Types

@@ -414,6 +414,8 @@ export const mockApi = {
       paymentMethod: data.paymentMethod,
       notes: data.notes,
       qrCodeScanned: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     mockPurchases.push(newPurchase);

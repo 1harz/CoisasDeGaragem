@@ -13,7 +13,6 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const SellerDashboard = lazy(() => import('@/pages/seller/dashboard/SellerDashboard'));
 const ProductsPage = lazy(() => import('@/pages/seller/products/ProductsPage'));
 const SalesPage = lazy(() => import('@/pages/seller/sales/SalesPage'));
-const QRCodesPage = lazy(() => import('@/pages/seller/qr-codes/QRCodesPage'));
 const AnalyticsPage = lazy(() => import('@/pages/seller/analytics/AnalyticsPage'));
 const SettingsPage = lazy(() => import('@/pages/seller/settings/SettingsPage'));
 const BuyerDashboard = lazy(() => import('@/pages/buyer/qr-scanner/BuyerDashboard'));
@@ -29,6 +28,7 @@ const ContactPage = lazy(() => import('@/pages/public/ContactPage'));
 const HelpPage = lazy(() => import('@/pages/public/HelpPage'));
 const TermsPage = lazy(() => import('@/pages/public/TermsPage'));
 const PrivacyPage = lazy(() => import('@/pages/public/PrivacyPage'));
+const ProductPublicPage = lazy(() => import('@/pages/public/ProductPublicPage'));
 
 function SessionManager() {
   useSessionTimeout();
@@ -102,16 +102,6 @@ function App() {
               <Suspense fallback={<Spinner />}>
                 <ProtectedRoute allowedRoles={['user']}>
                   <SalesPage />
-                </ProtectedRoute>
-              </Suspense>
-            }
-          />
-          <Route
-            path="/seller/qr-codes"
-            element={
-              <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['user']}>
-                  <QRCodesPage />
                 </ProtectedRoute>
               </Suspense>
             }
@@ -218,6 +208,14 @@ function App() {
             element={
               <Suspense fallback={<Spinner />}>
                 <PrivacyPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/product/:id"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <ProductPublicPage />
               </Suspense>
             }
           />

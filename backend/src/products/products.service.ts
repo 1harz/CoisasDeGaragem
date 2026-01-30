@@ -60,4 +60,37 @@ export class ProductsService {
             where: { sellerId },
         });
     }
+
+    async reserve(id: string) {
+        const product = await this.findOne(id);
+        if (!product.isAvailable || product.isSold || product.isReserved) {
+            throw new Error('Product cannot be reserved');
+        }
+        return this.prisma.product.update({
+            where: { id },
+            data: { isAvailable: false, isReserved: true },
+        });
+    }
+
+    async unreserve(id: string, sellerId: string) {
+        const product = await this.findOne(id);
+        if (product.sellerId !== sellerId) {
+            throw new Error('Unauthorized');
+        }
+        return this.prisma.product.update({
+            where: { id },
+            data: { isAvailable: true, isReserved: false },
+        });
+    }
+
+    async markAsSold(id: string, sellerId: string) {
+        const product = await this.findOne(id);
+        if (product.sellerId !== sellerId) {
+            throw new Error('Unauthorized');
+        }
+        return this.prisma.product.update({
+            where: { id },
+            data: { isAvailable: false, isReserved: false, isSold: true },
+        });
+    }
 }
