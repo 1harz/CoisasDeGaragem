@@ -12,7 +12,7 @@ export class AnalyticsController {
 
     @Get('seller')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     getSellerAnalytics(@CurrentUser() user: any) {
         return this.analyticsService.getSellerAnalytics(user.userId);
     }

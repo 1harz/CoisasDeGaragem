@@ -35,20 +35,12 @@ export function Header() {
                 <span className="text-gray-700 dark:text-gray-200">
                   Olá, <span className="font-medium">{user?.name}</span>
                 </span>
-                {user?.role === 'seller' && (
-                  <Link to="/seller/dashboard">
-                    <Button variant="secondary" size="sm">
-                      Dashboard
-                    </Button>
-                  </Link>
-                )}
-                {user?.role === 'buyer' && (
-                  <Link to="/buyer/qr-scanner">
-                    <Button variant="secondary" size="sm">
-                      Dashboard
-                    </Button>
-                  </Link>
-                )}
+                <Link to="/buyer/qr-scanner" className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+                  Comprar
+                </Link>
+                <Link to="/seller/dashboard" className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+                  Vender
+                </Link>
                 <Button variant="tertiary" size="md" className="font-medium px-6 border-2 border-red-100 text-red-600 hover:bg-red-50 hover:border-red-200" onClick={handleLogout}>
                   Sair
                 </Button>

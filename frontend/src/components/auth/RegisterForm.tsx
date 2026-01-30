@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, type RegisterFormData } from '@/utils/validationSchemas';
 import { Input } from '@/components/common/Input';
-import { Select } from '@/components/common/Select';
 import { Button } from '@/components/common/Button';
 
 interface RegisterFormProps {
@@ -18,6 +17,14 @@ export function RegisterForm({ onSubmit, isLoading = false }: RegisterFormProps)
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: 'onBlur',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      role: 'user',
+      phone: '',
+    },
   });
 
   const handleFormSubmit = async (data: RegisterFormData) => {
@@ -73,19 +80,7 @@ export function RegisterForm({ onSubmit, isLoading = false }: RegisterFormProps)
         disabled={isLoading}
         autoComplete="new-password"
       />
-
-      <Select
-        id="role"
-        label="Tipo de conta"
-        error={errors.role?.message}
-        options={[
-          { value: 'seller', label: 'Vendedor' },
-          { value: 'buyer', label: 'Comprador' },
-        ]}
-        fullWidth
-        disabled={isLoading}
-        {...register('role')}
-      />
+      {/* Role selection removed - defaulting to user */}
 
       <Input
         id="phone"

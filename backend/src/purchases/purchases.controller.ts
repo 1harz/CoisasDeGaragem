@@ -17,27 +17,24 @@ export class PurchasesController {
         const pageNumber = page ? parseInt(page, 10) : 1;
         const limitNumber = limit ? parseInt(limit, 10) : 20;
 
-        if (user.role === UserRole.BUYER) {
-            return this.purchasesService.findAllByBuyer(user.userId, pageNumber, limitNumber, status);
-        } else if (user.role === UserRole.SELLER) {
-            return this.purchasesService.findAllBySeller(user.userId, pageNumber, limitNumber, status);
-        }
+        // Default to returning purchases (as a buyer)
+        return this.purchasesService.findAllByBuyer(user.userId, pageNumber, limitNumber, status);
     }
 
     @Post()
-    @Roles(UserRole.BUYER)
+    @Roles(UserRole.USER)
     create(@Body() createPurchaseDto: CreatePurchaseDto, @CurrentUser() user: any) {
         return this.purchasesService.create(createPurchaseDto, user.userId);
     }
 
     @Get('history')
-    @Roles(UserRole.BUYER)
+    @Roles(UserRole.USER)
     getHistory(@CurrentUser() user: any) {
         return this.purchasesService.findAllByBuyer(user.userId);
     }
 
     @Get('sales')
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     getSales(@CurrentUser() user: any) {
         return this.purchasesService.findAllBySeller(user.userId);
     }

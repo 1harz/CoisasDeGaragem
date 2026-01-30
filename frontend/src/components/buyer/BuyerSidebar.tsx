@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQrcode, faShoppingBag, faUser, faHistory, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, faShoppingBag, faUser, faHistory, faSignOutAlt, faStore } from '@fortawesome/free-solid-svg-icons';
 import { Modal } from '@/components/common/Modal';
 import { Button } from '@/components/common/Button';
 import { useAuth } from '@/hooks/useAuth';
@@ -103,6 +103,14 @@ export function BuyerSidebar({ isOpen, onToggle }: BuyerSidebarProps) {
 
           {/* Footer */}
           <div className="p-4 border-t border-gray-200">
+            <Link
+              to="/seller/dashboard"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-secondary hover:bg-secondary-50 transition-colors font-medium border border-secondary-100 group mb-2"
+            >
+              <FontAwesomeIcon icon={faStore} className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span>Modo Vendedor</span>
+            </Link>
+
             <button
               onClick={() => setShowLogoutModal(true)}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium border border-red-100 group"

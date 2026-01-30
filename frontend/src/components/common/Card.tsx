@@ -19,9 +19,9 @@ export function Card({
   hoverable = false,
   onClick,
 }: CardProps) {
-  const baseClasses = 'bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden';
-  const hoverClasses = hoverable ? 'hover:shadow-lg transition-shadow duration-200 cursor-pointer' : '';
-  
+  const baseClasses = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden';
+  const hoverClasses = hoverable ? 'hover:shadow-md hover:border-primary-100 transition-all duration-300 cursor-pointer hover:-translate-y-0.5' : '';
+
   return (
     <div
       className={`${baseClasses} ${hoverClasses} ${className}`}

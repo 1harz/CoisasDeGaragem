@@ -71,7 +71,7 @@ export const registerSchema = z
       })
       .min(2, 'O nome deve ter no mínimo 2 caracteres')
       .max(100, 'O nome deve ter no máximo 100 caracteres'),
-    role: z.enum(['seller', 'buyer'], {
+    role: z.enum(['user', 'admin'], { // Allow admin for dev, or just user
       message: 'Tipo de conta é obrigatório',
     }),
     phone: z
