@@ -113,6 +113,14 @@ export function SellerSidebar({ isOpen, onToggle }: SellerSidebarProps) {
 
           {/* Footer */}
           <div className="p-4 border-t border-gray-200">
+            <Link
+              to="/buyer/qr-scanner"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-primary hover:bg-primary-50 transition-colors font-medium border border-primary-100 group mb-2"
+            >
+              <FontAwesomeIcon icon={faQrcode} className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span>Modo Comprador</span>
+            </Link>
+
             <button
               onClick={() => setShowLogoutModal(true)}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium border border-red-100 group"

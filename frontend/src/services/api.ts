@@ -122,7 +122,7 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({
         ...data,
-        role: data.role.toUpperCase(), // Map 'buyer'/'seller' to 'BUYER'/'SELLER'
+        role: data.role.toUpperCase(), // Map role to uppercase for backend
       }),
     });
 
@@ -242,6 +242,22 @@ export const api = {
     }
     return fetchApi<{ purchases: Purchase[]; pagination: any }>(
       `/purchases${buildQueryString(filters)}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+    );
+  },
+
+  getSales: async (filters?: PurchaseFilters): Promise<ApiResult<{ purchases: Purchase[]; pagination: any }>> => {
+    if (ENABLE_MOCK_DATA) {
+      // Fallback or specific mock impl
+      return mockApi.getPurchases(filters);
+    }
+    return fetchApi<{ purchases: Purchase[]; pagination: any }>(
+      `/purchases/sales${buildQueryString(filters)}`,
       {
         method: 'GET',
         headers: {

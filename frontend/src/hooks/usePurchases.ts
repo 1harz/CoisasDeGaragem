@@ -27,6 +27,19 @@ export function usePurchases() {
     [filters, setPurchases],
   );
 
+  const fetchSales = useCallback(
+    async (newFilters?: typeof filters) => {
+      const result = await api.getSales(newFilters || filters);
+
+      if (result.success) {
+        setPurchases(result.data.purchases);
+      } else {
+        throw new Error(result.error.message);
+      }
+    },
+    [filters, setPurchases],
+  );
+
   const fetchPurchase = useCallback(
     async (id: string) => {
       const result = await api.getPurchase(id);
@@ -71,6 +84,7 @@ export function usePurchases() {
     currentPurchase,
     filters,
     fetchPurchases,
+    fetchSales,
     fetchPurchase,
     createPurchase,
     editPurchase,

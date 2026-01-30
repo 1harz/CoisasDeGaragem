@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { BrowserQRCodeReader, Result } from '@zxing/library';
+import { BrowserQRCodeReader } from '@zxing/library';
 import { Alert } from '@/components/common/Alert';
 import { Spinner } from '@/components/common/Spinner';
 import { Button } from '@/components/common/Button';

@@ -12,7 +12,7 @@ import { faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
 
 export default function SalesPage() {
     const { user } = useAuthStore();
-    const { purchases, fetchPurchases } = usePurchases();
+    const { purchases, fetchSales } = usePurchases();
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
@@ -21,7 +21,7 @@ export default function SalesPage() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                await fetchPurchases();
+                await fetchSales();
             } catch (error) {
                 console.error('Falha ao carregar vendas:', error);
             } finally {
@@ -29,7 +29,7 @@ export default function SalesPage() {
             }
         };
         loadData();
-    }, [fetchPurchases]);
+    }, [fetchSales]);
 
     const filteredSales = useMemo(() => {
         if (!user) return [];

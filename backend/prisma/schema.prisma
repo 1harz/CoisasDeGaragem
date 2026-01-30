@@ -7,8 +7,7 @@ datasource db {
 }
 
 enum UserRole {
-  BUYER
-  SELLER
+  USER
   ADMIN
 }
 

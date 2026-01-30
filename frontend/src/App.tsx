@@ -80,7 +80,7 @@ function App() {
             path="/seller/dashboard"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <SellerDashboard />
                 </ProtectedRoute>
               </Suspense>
@@ -90,7 +90,7 @@ function App() {
             path="/seller/products"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <ProductsPage />
                 </ProtectedRoute>
               </Suspense>
@@ -100,7 +100,7 @@ function App() {
             path="/seller/sales"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <SalesPage />
                 </ProtectedRoute>
               </Suspense>
@@ -110,7 +110,7 @@ function App() {
             path="/seller/qr-codes"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <QRCodesPage />
                 </ProtectedRoute>
               </Suspense>
@@ -120,7 +120,7 @@ function App() {
             path="/seller/analytics"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <AnalyticsPage />
                 </ProtectedRoute>
               </Suspense>
@@ -130,7 +130,7 @@ function App() {
             path="/seller/settings"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['seller']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <SettingsPage />
                 </ProtectedRoute>
               </Suspense>
@@ -142,7 +142,7 @@ function App() {
             path="/buyer/qr-scanner"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['buyer']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <BuyerDashboard />
                 </ProtectedRoute>
               </Suspense>
@@ -152,7 +152,7 @@ function App() {
             path="/buyer/purchases"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['buyer']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <PurchasesPage />
                 </ProtectedRoute>
               </Suspense>
@@ -162,7 +162,7 @@ function App() {
             path="/buyer/profile"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['buyer']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <ProfilePage />
                 </ProtectedRoute>
               </Suspense>
@@ -172,7 +172,7 @@ function App() {
             path="/buyer/history"
             element={
               <Suspense fallback={<Spinner />}>
-                <ProtectedRoute allowedRoles={['buyer']}>
+                <ProtectedRoute allowedRoles={['user']}>
                   <HistoryPage />
                 </ProtectedRoute>
               </Suspense>

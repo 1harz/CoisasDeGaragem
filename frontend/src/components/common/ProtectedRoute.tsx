@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/authStore';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: ('seller' | 'buyer')[];
+  allowedRoles?: ('user' | 'admin')[];
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
@@ -14,8 +14,15 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
+  // If user has 'user' role, they can access both buyer and seller routes
+  // If user has 'admin' role, they can access everything
+  if (user && (user.role === 'user' || user.role === 'admin')) {
+    return <>{children}</>;
+  }
+
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    const redirectPath = user.role === 'seller' ? '/seller/dashboard' : '/buyer/qr-scanner';
+    // Legacy support or fallback logic
+    const redirectPath = '/buyer/qr-scanner';
     return <Navigate to={redirectPath} replace />;
   }
 

@@ -14,7 +14,7 @@ export class ProductsController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     create(@Body() createProductDto: CreateProductDto, @CurrentUser() user: any) {
         return this.productsService.create(createProductDto, user.userId); // userId comes from JwtStrategy validate
     }
@@ -26,7 +26,7 @@ export class ProductsController {
 
     @Get('my-products')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     getMyProducts(@CurrentUser() user: any) {
         return this.productsService.getSellerProducts(user.userId);
     }
@@ -38,14 +38,14 @@ export class ProductsController {
 
     @Patch(':id')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @CurrentUser() user: any) {
         return this.productsService.update(id, updateProductDto, user.userId);
     }
 
     @Delete(':id')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(UserRole.SELLER)
+    @Roles(UserRole.USER)
     remove(@Param('id') id: string, @CurrentUser() user: any) {
         return this.productsService.remove(id, user.userId);
     }

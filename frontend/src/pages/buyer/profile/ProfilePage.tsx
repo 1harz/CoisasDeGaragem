@@ -101,7 +101,7 @@ export default function ProfilePage() {
                 <FontAwesomeIcon icon={faUserTag} className="text-gray-400 w-4" />
                 Tipo de Conta:
               </span>
-              <span className="font-medium text-primary capitalize">{user.role === 'buyer' ? 'Comprador' : 'Vendedor'}</span>
+              <span className="font-medium text-primary capitalize">{user.role === 'admin' ? 'Administrador' : 'Usuário'}</span>
             </div>
             <div className="flex justify-between py-2 border-b border-gray-200 items-center">
               <span className="text-gray-600 flex items-center gap-2">

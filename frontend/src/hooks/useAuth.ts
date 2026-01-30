@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { api } from '@/services/api';
+import type { UserRole } from '@/types';
 
 export function useAuth() {
   const { user, token, isAuthenticated, login, logout, updateUser } = useAuthStore();
@@ -17,9 +18,8 @@ export function useAuth() {
         login(userData, userToken);
         localStorage.setItem('token', userToken);
 
-        // Redirect based on role
-        const redirectPath = userData.role === 'seller' ? '/seller/dashboard' : '/buyer/qr-scanner';
-        navigate(redirectPath, { replace: true });
+        // Redirect all users to buyer/qr-scanner (main hub)
+        navigate('/buyer/qr-scanner', { replace: true });
       } else {
         throw new Error(result.error.message);
       }
@@ -28,7 +28,7 @@ export function useAuth() {
   );
 
   const handleRegister = useCallback(
-    async (email: string, password: string, name: string, role: 'seller' | 'buyer', phone?: string) => {
+    async (email: string, password: string, name: string, role: UserRole, phone?: string) => {
       const result = await api.register({ email, password, name, role, phone });
 
       if (result.success) {
@@ -36,9 +36,8 @@ export function useAuth() {
         login(userData, userToken);
         localStorage.setItem('token', userToken);
 
-        // Redirect based on role
-        const redirectPath = userData.role === 'seller' ? '/seller/dashboard' : '/buyer/qr-scanner';
-        navigate(redirectPath, { replace: true });
+        // Redirect all users to buyer/qr-scanner (main hub)
+        navigate('/buyer/qr-scanner', { replace: true });
       } else {
         throw new Error(result.error.message);
       }
