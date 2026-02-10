@@ -49,4 +49,23 @@ export class ProductsController {
     remove(@Param('id') id: string, @CurrentUser() user: any) {
         return this.productsService.remove(id, user.userId);
     }
+
+    @Patch(':id/reserve')
+    reserve(@Param('id') id: string) {
+        return this.productsService.reserve(id);
+    }
+
+    @Patch(':id/unreserve')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(UserRole.USER)
+    unreserve(@Param('id') id: string, @CurrentUser() user: any) {
+        return this.productsService.unreserve(id, user.userId);
+    }
+
+    @Patch(':id/sold')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(UserRole.USER)
+    markAsSold(@Param('id') id: string, @CurrentUser() user: any) {
+        return this.productsService.markAsSold(id, user.userId);
+    }
 }

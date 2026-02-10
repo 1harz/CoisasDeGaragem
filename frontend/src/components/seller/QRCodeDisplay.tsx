@@ -1,6 +1,5 @@
 import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
-import { Card } from '@/components/common/Card';
 import type { Product } from '@/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPrint, faDownload, faQrcode } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +30,7 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
         <p className="text-sm mt-8 text-gray-500">coisasdegaragem.com</p>
       </div>
 
-      <Card className="p-6 print:hidden">
+      <div className="print:hidden">
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center mb-6">
@@ -45,10 +44,10 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
           <div className="flex justify-center mb-6">
             {loading ? (
               <div className="w-64 h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
               </div>
             ) : qrCodeUrl ? (
-              <div className="bg-white p-4 rounded-lg shadow-inner">
+              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <img
                   src={qrCodeUrl}
                   alt={`QR Code para ${product.name}`}
@@ -66,8 +65,8 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
           {/* Product Details */}
           <div className="bg-gray-50 rounded-xl p-5 space-y-3 border border-gray-100">
             <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">Preço:</span>
-              <span className="text-xl font-bold text-primary">
+              <span className="text-sm text-gray-600 font-medium">Preço:</span>
+              <span className="text-xl font-bold text-blue-600">
                 {new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
                   currency: product.currency,
@@ -76,19 +75,19 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
             </div>
 
             <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">Categoria:</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-sm text-gray-600 font-medium">Categoria:</span>
+              <span className="font-semibold text-gray-900">
                 {product.category || 'Não definida'}
               </span>
             </div>
 
             <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">Condição:</span>
+              <span className="text-sm text-gray-600 font-medium">Condição:</span>
               <Badge variant="success">{product.condition || 'Bom'}</Badge>
             </div>
 
             <div className="flex justify-between items-start">
-              <span className="text-sm text-gray-600">Status:</span>
+              <span className="text-sm text-gray-600 font-medium">Status:</span>
               {product.isSold ? (
                 <Badge variant="error">Vendido</Badge>
               ) : !product.isAvailable ? (
@@ -99,22 +98,15 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
             </div>
           </div>
 
-          {/* QR Code Info */}
-          {product.qrCode && qrCodeUrl && (
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-              <div className="flex items-center gap-2 mb-2 text-blue-700">
-                <FontAwesomeIcon icon={faQrcode} className="w-4 h-4" />
-                <span className="font-medium text-sm">Código Identificador:</span>
-              </div>
-              <code className="block bg-white px-3 py-2 rounded border border-blue-100 text-sm font-mono text-blue-900 break-all text-center">
-                {product.qrCode}
-              </code>
-            </div>
-          )}
-
-          <div className="text-xs text-gray-500 space-y-1 px-2">
-            <p>• Use este QR Code para marcar seus produtos na garagem</p>
-            <p>• Os compradores podem escanear para ver detalhes e comprar</p>
+          <div className="text-xs text-gray-500 space-y-2 px-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100/50">
+            <p className="flex items-start gap-2">
+              <span className="text-blue-500">•</span>
+              <span>Use este QR Code para identificar seus produtos na garagem.</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <span className="text-blue-500">•</span>
+              <span>Os compradores podem escanear para ver detalhes, fotos e realizar a compra.</span>
+            </p>
           </div>
 
           {/* Actions */}
@@ -124,7 +116,7 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
                 variant="primary"
                 onClick={onPrint}
                 disabled={!qrCodeUrl || loading}
-                className="flex-1"
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
               >
                 <FontAwesomeIcon icon={faPrint} className="mr-2" />
                 Imprimir
@@ -135,15 +127,15 @@ export function QRCodeDisplay({ product, qrCodeUrl, onPrint, onDownload, loading
                 variant="secondary"
                 onClick={onDownload}
                 disabled={!qrCodeUrl || loading}
-                className="flex-1"
+                className="flex-1 bg-white hover:bg-gray-50 text-gray-700 border-gray-200"
               >
                 <FontAwesomeIcon icon={faDownload} className="mr-2" />
-                Baixar
+                Baixar PDF
               </Button>
             )}
           </div>
         </div>
-      </Card>
+      </div>
     </>
   );
 }

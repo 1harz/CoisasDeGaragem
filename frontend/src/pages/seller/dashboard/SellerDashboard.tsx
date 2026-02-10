@@ -154,7 +154,7 @@ export default function SellerDashboard() {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Button
-                  onClick={() => navigate('/seller/products/new')}
+                  onClick={() => navigate('/seller/products', { state: { showForm: true } })}
                   className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-blue-50 text-[#4169E1] hover:bg-[#4169E1] hover:text-white transition-all duration-300 border-none rounded-xl shadow-sm hover:shadow-md group"
                 >
                   <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#4169E1] shadow-sm group-hover:scale-110 transition-transform">

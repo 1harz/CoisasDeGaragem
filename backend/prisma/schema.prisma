@@ -68,6 +68,7 @@ model Product {
   qrCode      String           @unique
   
   isAvailable Boolean          @default(true)
+  isReserved  Boolean          @default(false)
   isSold      Boolean          @default(false)
   
   createdAt   DateTime         @default(now())
