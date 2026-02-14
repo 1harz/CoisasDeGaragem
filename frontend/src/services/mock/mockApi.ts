@@ -204,6 +204,7 @@ export const mockApi = {
       condition: data.condition,
       qrCode: 'QR-PRODUCT-' + Date.now(),
       isAvailable: true,
+      isReserved: false,
       isSold: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
