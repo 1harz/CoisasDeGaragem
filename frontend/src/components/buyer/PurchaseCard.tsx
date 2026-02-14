@@ -15,7 +15,8 @@ const statusConfig = {
 };
 
 export function PurchaseCard({ purchase, onViewDetails }: PurchaseCardProps) {
-  const config = statusConfig[purchase.status] || statusConfig.pending;
+  const purchaseStatusKey: keyof typeof statusConfig = purchase.status as keyof typeof statusConfig;
+  const config = statusConfig[purchaseStatusKey] || statusConfig.pending;
   const formattedDate = new Date(purchase.purchaseDate).toLocaleDateString('pt-BR', {
     year: 'numeric',
     month: 'long',

@@ -76,6 +76,7 @@ migrations/versions/
 **/.env.production
 **/.env.*.local
 *.env
+backend/.env
 
 # Logs
 logs/
